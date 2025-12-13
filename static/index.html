@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Learnify AI - The #1 AI-Powered Learning Platform</title>
+    <meta
+      name="description"
+      content="Transform enterprise learning with AI-powered personalization, intelligent content creation, and data-driven insights."
+    />
+
+    <link rel="icon" href="icon-light-32x32.png" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="icon-dark-32x32.png" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-icon.png" />
+
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script defer src="assets/site.js"></script>
+  </head>
+  <body class="font-sans antialiased bg-background text-foreground">
+    <div data-site-header></div>
+
+    <main class="min-h-screen">
+      <!-- Hero -->
+      <section data-hero class="relative min-h-[90vh] flex items-center bg-foreground overflow-hidden">
+        <div class="absolute inset-0">
+          <div data-hero-bg class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ease-in-out"></div>
+          <div data-hero-bg class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ease-in-out"></div>
+          <div data-hero-bg class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ease-in-out"></div>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-foreground/80 via-foreground/50 to-transparent"></div>
+
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          <button type="button" data-hero-dot class="w-2 h-2 rounded-full transition-all duration-300" aria-label="Go to slide 1"></button>
+          <button type="button" data-hero-dot class="w-2 h-2 rounded-full transition-all duration-300" aria-label="Go to slide 2"></button>
+          <button type="button" data-hero-dot class="w-2 h-2 rounded-full transition-all duration-300" aria-label="Go to slide 3"></button>
+        </div>
+
+        <div class="relative z-10 mx-auto max-w-7xl px-12 pt-32 pb-20 lg:px-16">
+          <div class="max-w-2xl text-left">
+            <h1 class="text-4xl font-bold tracking-tight text-background sm:text-5xl lg:text-6xl text-left">
+              <span data-hero-title class="">The #1 </span>
+              <span data-hero-highlight class="text-primary">AI-powered</span>
+              <span data-hero-subtitle class="block">learning platform</span>
+            </h1>
+
+            <p data-hero-desc class="mt-6 text-lg leading-8 text-background/80 max-w-xl text-left">
+              Transform how your organization learns with intelligent personalization, AI-generated content, and insights that drive real business impact.
+            </p>
+
+            <div class="mt-10 flex flex-wrap items-center gap-4">
+              <a href="contact/index.html" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground hover:bg-primary/90 h-10 rounded-md px-6 has-[>svg]:px-4 text-base">
+                Book a demo
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 h-4 w-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+              <a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all text-background hover:text-background hover:bg-background/10 h-10 rounded-md px-6 has-[>svg]:px-4 text-base">
+                Take a tour
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="platform" class="py-24 bg-background">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="relative">
+              <div class="bg-card border border-border rounded-xl shadow-2xl p-6 space-y-6">
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="space-y-1">
+                    <p class="text-xs text-muted-foreground">Completions rate</p>
+                    <p class="text-2xl font-bold text-primary">43.6%</p>
+                  </div>
+                  <div class="space-y-1">
+                    <p class="text-xs text-muted-foreground">First Access to Completion</p>
+                    <p class="text-2xl font-bold text-foreground">24 minutes</p>
+                  </div>
+                  <div class="space-y-1">
+                    <p class="text-xs text-muted-foreground">Avg. Learning Time</p>
+                    <p class="text-2xl font-bold text-foreground">4 hours</p>
+                  </div>
+                </div>
+
+                <div class="bg-muted rounded-lg p-4">
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="font-medium text-sm">Skills</span>
+                    <span class="text-xs text-primary">+ Suggested skills</span>
+                  </div>
+                  <div class="space-y-2">
+                    <div class="flex items-center gap-2"><div class="h-2 w-2 rounded-full bg-primary"></div><span class="text-sm text-muted-foreground">Client relationship management</span></div>
+                    <div class="flex items-center gap-2"><div class="h-2 w-2 rounded-full bg-primary"></div><span class="text-sm text-muted-foreground">Leadership</span></div>
+                    <div class="flex items-center gap-2"><div class="h-2 w-2 rounded-full bg-primary"></div><span class="text-sm text-muted-foreground">Content Analytics</span></div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="text-center">
+                    <div class="relative w-16 h-16 mx-auto mb-2">
+                      <svg class="w-full h-full" viewBox="0 0 36 36">
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" class="text-muted"></path>
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="75, 100" class="text-primary"></path>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center"><span class="text-xs font-semibold">80.85k</span></div>
+                    </div>
+                    <p class="text-xs text-muted-foreground">Enrollments Status</p>
+                  </div>
+                  <div class="text-center">
+                    <div class="relative w-16 h-16 mx-auto mb-2">
+                      <svg class="w-full h-full" viewBox="0 0 36 36">
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" class="text-muted"></path>
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="75, 100" class="text-primary"></path>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center"><span class="text-xs font-semibold">34.97%</span></div>
+                    </div>
+                    <p class="text-xs text-muted-foreground">Completion Breakdown</p>
+                  </div>
+                  <div class="text-center">
+                    <div class="relative w-16 h-16 mx-auto mb-2">
+                      <svg class="w-full h-full" viewBox="0 0 36 36">
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" class="text-muted"></path>
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="75, 100" class="text-primary"></path>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center"><span class="text-xs font-semibold">80.85k</span></div>
+                    </div>
+                    <p class="text-xs text-muted-foreground">Self-Enrollments</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:pl-8">
+              <p class="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Our Platform</p>
+              <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
+                Discover the limitless power of learning
+              </h2>
+              <p class="mt-6 text-lg leading-8 text-muted-foreground">
+                Learning programs are only as good as the platform they're built on. Without a solid foundation, you can't engage your learners, deliver business value, grow your programs, simplify content management, or streamline your workflows and tech stack.
+              </p>
+              <p class="mt-4 text-lg leading-8 text-muted-foreground">
+                The Learnify learning platform provides the foundation you need to help your people and business learn, grow, and succeed, today and into the future.
+              </p>
+              <a href="#platform" class="inline-flex items-center gap-2 mt-8 text-primary font-medium hover:underline">
+                Discover the Learnify learning platform
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI -->
+      <section id="ai" class="py-24 bg-muted">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <p class="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">The Future of Learning</p>
+              <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
+                Driven by innovation.<br />Powered by AI.
+              </h2>
+              <p class="mt-6 text-lg leading-8 text-muted-foreground">
+                We're more than an LMS. We're the foundation on which the future of learning is built. Which is why innovation is the driving force behind our platform—and AI is at its core.
+              </p>
+              <p class="mt-4 text-lg leading-8 text-muted-foreground">
+                We harness the power of AI to accelerate content production, automate workflows and improve the learner experience. It's like doubling the size of your team, without adding headcount. Bigger impact, greater results.
+              </p>
+              <a href="ai-capabilities/index.html" class="inline-flex items-center gap-2 mt-8 text-primary font-medium hover:underline">
+                Learn more about Learnify AI
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+
+            <div class="relative">
+              <div
+                class="rounded-xl overflow-hidden shadow-2xl"
+                style="background-image: url('images/diverse-team-collaborating-in-modern-office-with-l.jpg'); background-size: cover; background-position: center"
+              >
+                <div class="bg-gradient-to-t from-background/80 to-transparent p-8 pt-48">
+                  <div class="bg-card border border-border rounded-lg p-4 max-w-xs ml-auto shadow-lg">
+                    <div class="flex items-center gap-2 mb-3">
+                      <div class="h-6 w-6 rounded bg-primary flex items-center justify-center">
+                        <span class="text-primary-foreground text-xs">✦</span>
+                      </div>
+                      <span class="text-xs text-muted-foreground">AI Assistant</span>
+                    </div>
+
+                    <div class="space-y-3">
+                      <div>
+                        <label class="text-xs text-muted-foreground">Number of activities</label>
+                        <div class="mt-1 bg-muted rounded px-3 py-2 text-sm">8</div>
+                      </div>
+                      <div>
+                        <label class="text-xs text-muted-foreground">Activity types</label>
+                        <div class="mt-1 bg-muted rounded px-3 py-2 text-sm flex items-center justify-between">
+                          Multiple choice
+                          <span class="text-primary">✓</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features grid -->
+      <section class="py-24 bg-background">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-2xl text-center">
+            <p class="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Capabilities</p>
+            <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">Everything you need to transform learning</h2>
+            <p class="mt-6 text-lg leading-8 text-muted-foreground">Our comprehensive platform combines cutting-edge AI with proven learning science to deliver results that matter.</p>
+          </div>
+
+          <div class="mx-auto mt-16 max-w-5xl">
+            <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              <div class="relative group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">AI</div>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">AI-Powered Personalization</h3>
+                <p class="mt-2 text-muted-foreground leading-relaxed">Deliver personalized learning paths that adapt to each learner's needs, preferences, and goals in real-time.</p>
+              </div>
+              <div class="relative group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">👥</div>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">Social Learning</h3>
+                <p class="mt-2 text-muted-foreground leading-relaxed">Foster collaboration and knowledge sharing with integrated social features, peer learning, and community building.</p>
+              </div>
+              <div class="relative group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">📊</div>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">Advanced Analytics</h3>
+                <p class="mt-2 text-muted-foreground leading-relaxed">Gain actionable insights with comprehensive dashboards, predictive analytics, and custom reporting.</p>
+              </div>
+              <div class="relative group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">✨</div>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">Content Generation</h3>
+                <p class="mt-2 text-muted-foreground leading-relaxed">Create engaging courses in minutes with AI-assisted content generation, translation, and optimization.</p>
+              </div>
+              <div class="relative group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">🛡️</div>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">Enterprise Security</h3>
+                <p class="mt-2 text-muted-foreground leading-relaxed">Rest easy with SOC 2 compliance, SSO integration, and enterprise-grade security for your learning data.</p>
+              </div>
+              <div class="relative group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">⚡</div>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">Seamless Integrations</h3>
+                <p class="mt-2 text-muted-foreground leading-relaxed">Connect with 400+ business tools including HRIS, CRM, and collaboration platforms via native integrations.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials -->
+      <section class="py-24 bg-foreground">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-2xl text-center mb-16">
+            <p class="text-sm font-semibold text-primary uppercase tracking-wide mb-3">Testimonials</p>
+            <h2 class="text-3xl font-bold tracking-tight text-background sm:text-4xl text-balance">Trusted by learning leaders worldwide</h2>
+          </div>
+
+          <div class="grid gap-8 md:grid-cols-3">
+            <div class="bg-background/5 backdrop-blur border border-background/10 rounded-xl p-8 hover:bg-background/10 transition-colors">
+              <div class="h-8 w-8 text-primary mb-4">“”</div>
+              <p class="text-background/90 leading-relaxed mb-6">"Learnify has completely transformed how we approach employee development. The AI-powered recommendations have increased our course completion rates by 340%."</p>
+              <div class="flex items-center gap-4">
+                <img src="images/professional-woman-headshot.png" alt="Sarah Chen" class="h-12 w-12 rounded-full object-cover" />
+                <div>
+                  <p class="font-semibold text-background">Sarah Chen</p>
+                  <p class="text-sm text-background/60">Chief Learning Officer</p>
+                  <p class="text-sm text-primary">TechCorp Global</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-background/5 backdrop-blur border border-background/10 rounded-xl p-8 hover:bg-background/10 transition-colors">
+              <div class="h-8 w-8 text-primary mb-4">“”</div>
+              <p class="text-background/90 leading-relaxed mb-6">"The platform's ability to create personalized learning paths at scale has been a game-changer. Our team is more engaged than ever before."</p>
+              <div class="flex items-center gap-4">
+                <img src="images/professional-man-headshot.png" alt="Marcus Rodriguez" class="h-12 w-12 rounded-full object-cover" />
+                <div>
+                  <p class="font-semibold text-background">Marcus Rodriguez</p>
+                  <p class="text-sm text-background/60">VP of People Operations</p>
+                  <p class="text-sm text-primary">InnovateCo</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-background/5 backdrop-blur border border-background/10 rounded-xl p-8 hover:bg-background/10 transition-colors">
+              <div class="h-8 w-8 text-primary mb-4">“”</div>
+              <p class="text-background/90 leading-relaxed mb-6">"We evaluated 15 different LMS platforms. Learnify's AI capabilities and enterprise features made it the clear winner for our organization."</p>
+              <div class="flex items-center gap-4">
+                <img src="images/professional-woman-executive-headshot.png" alt="Emily Watson" class="h-12 w-12 rounded-full object-cover" />
+                <div>
+                  <p class="font-semibold text-background">Emily Watson</p>
+                  <p class="text-sm text-background/60">Director of L&amp;D</p>
+                  <p class="text-sm text-primary">Global Finance Inc</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="py-20 bg-primary">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+            <div class="text-center"><p class="text-4xl font-bold text-primary-foreground sm:text-5xl">40M+</p><p class="mt-2 text-primary-foreground/80">Active learners</p></div>
+            <div class="text-center"><p class="text-4xl font-bold text-primary-foreground sm:text-5xl">3,800+</p><p class="mt-2 text-primary-foreground/80">Enterprise customers</p></div>
+            <div class="text-center"><p class="text-4xl font-bold text-primary-foreground sm:text-5xl">180+</p><p class="mt-2 text-primary-foreground/80">Countries served</p></div>
+            <div class="text-center"><p class="text-4xl font-bold text-primary-foreground sm:text-5xl">99.9%</p><p class="mt-2 text-primary-foreground/80">Platform uptime</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="py-24 bg-background">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-2xl text-center">
+            <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">Ready to transform your learning experience?</h2>
+            <p class="mt-6 text-lg leading-8 text-muted-foreground">
+              Join thousands of organizations already using Learnify to create impactful learning experiences. Book a demo today and see the difference AI-powered learning can make.
+            </p>
+            <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground hover:bg-primary/90 h-10 rounded-md px-6 has-[>svg]:px-4 text-base px-8">
+                Book a demo
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 h-4 w-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+              <a href="contact/index.html" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground h-10 rounded-md px-6 has-[>svg]:px-4 text-base px-8 bg-transparent">
+                Contact sales
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bg-foreground">
+        <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+          <div class="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
+            <div class="col-span-2 lg:col-span-1">
+              <a href="index.html" class="flex items-center gap-2">
+                <div class="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+                  <span class="text-primary-foreground font-bold text-sm">L</span>
+                </div>
+                <span class="font-semibold text-xl text-background">Learnify</span>
+              </a>
+              <p class="mt-4 text-sm text-background/60 max-w-xs">The #1 AI-powered learning platform for enterprises worldwide.</p>
+            </div>
+
+            <div>
+              <h3 class="text-sm font-semibold text-background">Platform</h3>
+              <ul class="mt-4 space-y-3">
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Features</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Integrations</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">AI Capabilities</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Mobile App</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Security</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-background">Solutions</h3>
+              <ul class="mt-4 space-y-3">
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Enterprise</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Small Business</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Education</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Government</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Healthcare</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-background">Resources</h3>
+              <ul class="mt-4 space-y-3">
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Blog</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Case Studies</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Webinars</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Documentation</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">API Reference</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-background">Company</h3>
+              <ul class="mt-4 space-y-3">
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">About Us</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Careers</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Press</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Partners</a></li>
+                <li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-16 pt-8 border-t border-background/10">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <p class="text-sm text-background/60">© 2025 Learnify AI. All rights reserved.</p>
+              <div class="flex gap-6">
+                <a href="#" class="text-sm text-background/60 hover:text-background">Privacy Policy</a>
+                <a href="#" class="text-sm text-background/60 hover:text-background">Terms of Service</a>
+                <a href="#" class="text-sm text-background/60 hover:text-background">Cookie Settings</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>

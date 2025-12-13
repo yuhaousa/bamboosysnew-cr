@@ -56,18 +56,18 @@ const contactMethods = [
 const offices = [
   {
     city: "San Francisco",
-    address: "100 Market Street, Suite 300",
-    region: "CA 94105, USA",
+    address: "116 /Changi Road , WIS@Changi "#02-03,
+    region: "419718, Singapore",
     phone: "+1 (415) 555-0123",
   },
   {
-    city: "London",
+    city: "Hong Kong",
     address: "25 Old Broad Street",
     region: "EC2N 1HN, UK",
     phone: "+44 20 7123 4567",
   },
   {
-    city: "Singapore",
+    city: "Shengyang China",
     address: "1 Raffles Place, Tower 1",
     region: "Singapore 048616",
     phone: "+65 6123 4567",
@@ -295,7 +295,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="font-medium text-foreground">Email</p>
-                      <a href="mailto:hello@learnify.ai" className="text-muted-foreground hover:text-primary">
+                      <a href="mailto:info@bamboosys.com" className="text-muted-foreground hover:text-primary">
                         hello@learnify.ai
                       </a>
                     </div>
@@ -306,7 +306,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="font-medium text-foreground">Phone</p>
-                      <a href="tel:+18005550123" className="text-muted-foreground hover:text-primary">
+                      <a href="tel:+65 69061224" className="text-muted-foreground hover:text-primary">
                         +1 (800) 555-0123
                       </a>
                     </div>
