@@ -34,7 +34,7 @@
   }
 
   const navigation = [
-    { name: 'Platform', target: 'index.html#platform', hasDropdown: true },
+    { name: 'Platform', target: 'index.html#platform', hasDropdown: false },
     { name: 'Features', target: 'features/index.html' },
     { name: 'AI Capabilities', target: 'ai-capabilities/index.html' },
     { name: 'Integrations', target: 'integrations/index.html' },
