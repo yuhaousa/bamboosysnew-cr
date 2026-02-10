@@ -37,10 +37,10 @@
     { name: 'Platform', target: 'index.html#platform', hasDropdown: false },
     { name: 'Features', target: 'features/index.html' },
     { name: 'AI Capabilities', target: 'ai-capabilities/index.html' },
-    { name: 'Integrations', target: 'integrations/index.html' },
+    // { name: 'Integrations', target: 'integrations/index.html' },
     { name: 'Enterprise', target: 'enterprise/index.html' },
     { name: 'Case Studies', target: 'case-studies/index.html' },
-    { name: 'Contact Us', target: 'contact/index.html' },
+    // { name: 'Contact Us', target: 'contact/index.html' },
   ]
 
   function isActiveLink(target, relPath) {
@@ -116,16 +116,20 @@
       desktopLinks +
       '</div>' +
       '<div class="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">' +
-      '<a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">Sign in</a>' +
-      '<a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2">Book a demo</a>' +
+      // '<a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">Sign in</a>' +
+      '<a href="' +
+  (prefix ? joinPath(prefix, '/contact/index.html') : 'contact/index.html') +
+'" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2">Contact Us</a>' +
       '</div>' +
       '</nav>' +
       '<div class="lg:hidden bg-background border-b border-border" data-mobile-nav-panel hidden>' +
       '<div class="space-y-1 px-12 py-4">' +
       mobileLinks +
       '<div class="pt-4 flex flex-col gap-2">' +
-      '<a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full justify-center">Sign in</a>' +
-      '<a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 w-full justify-center">Book a demo</a>' +
+      // '<a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full justify-center">Sign in</a>' +
+      '<a href="' +
+  (prefix ? joinPath(prefix, '/contact/index.html') : 'contact/index.html') +
+'" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 w-full justify-center">Contact Us</a>' +
       '</div>' +
       '</div>' +
       '</div>' +

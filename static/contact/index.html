@@ -13,13 +13,14 @@
 
     <link rel="stylesheet" href="../assets/styles.css" />
     <script defer src="../assets/site.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body class="font-sans antialiased bg-background text-foreground">
     <div data-site-header></div>
 
     <main class="min-h-screen bg-background">
       <section class="pt-32 pb-16 bg-gradient-to-br from-primary/5 via-background to-accent/5">
-        <div class="mx-auto max-w-7xl px-12 lg:px-16">
+        <div class="mx-auto max-w-7xl px-6 lg:px-6">
           <div class="max-w-3xl text-left">
             <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">✉️ Get in Touch</span>
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">We'd love to hear <span class="text-primary">from you</span></h1>
@@ -28,7 +29,7 @@
         </div>
       </section>
 
-      <section class="py-16 bg-background">
+      <!-- <section class="py-16 bg-background">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
           <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="p-6 rounded-2xl border border-border bg-card hover:border-primary/50 hover:shadow-lg transition-all group">
@@ -57,7 +58,7 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
 
       <section class="py-20 bg-muted/30">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
@@ -73,6 +74,20 @@
               <form data-contact-form class="space-y-6">
                 <h2 class="text-2xl font-bold text-foreground mb-2">Send us a message</h2>
                 <p class="text-muted-foreground mb-8">Fill out the form below and we'll get back to you shortly.</p>
+
+                 <div class="space-y-2">
+                  <label for="category" class="text-sm font-medium leading-none">Inquiry Type *</label>
+                  <select id="category" name="category" required class="w-full h-10 px-3 rounded-md border border-input bg-background text-sm">
+                    <option value="">Select inquiry type</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="sales">Sales & Pricing</option>
+                    <option value="support">Technical Support</option>
+                    <option value="partnership">Partnership</option>
+                    <option value="enterprise">Enterprise Solutions</option>
+                    <option value="demo">Request Demo</option>
+                    <option value="billing">Billing & Account</option>
+                  </select>
+                </div>
 
                 <div class="grid sm:grid-cols-2 gap-4">
                   <div class="space-y-2">
@@ -90,28 +105,18 @@
                   <input id="email" name="email" type="email" required placeholder="john@company.com" class="w-full h-10 px-3 rounded-md border border-input bg-background text-sm" />
                 </div>
 
-                <div class="grid sm:grid-cols-2 gap-4">
-                  <div class="space-y-2">
-                    <label for="company" class="text-sm font-medium leading-none">Company *</label>
-                    <input id="company" name="company" required placeholder="Acme Inc." class="w-full h-10 px-3 rounded-md border border-input bg-background text-sm" />
-                  </div>
-                  <div class="space-y-2">
-                    <label for="jobTitle" class="text-sm font-medium leading-none">Job Title</label>
-                    <input id="jobTitle" name="jobTitle" placeholder="L&D Manager" class="w-full h-10 px-3 rounded-md border border-input bg-background text-sm" />
-                  </div>
+                <div class="space-y-2">
+                  <label for="jobTitle" class="text-sm font-medium leading-none">Title</label>
+                  <input id="jobTitle" name="jobTitle" placeholder="Your title" class="w-full h-10 px-3 rounded-md border border-input bg-background text-sm" />
                 </div>
 
-                <div class="space-y-2">
-                  <label for="employees" class="text-sm font-medium leading-none">Company Size</label>
-                  <select id="employees" name="employees" class="w-full h-10 px-3 rounded-md border border-input bg-background text-sm">
-                    <option value="">Select company size</option>
-                    <option value="1-50">1-50 employees</option>
-                    <option value="51-200">51-200 employees</option>
-                    <option value="201-1000">201-1,000 employees</option>
-                    <option value="1001-5000">1,001-5,000 employees</option>
-                    <option value="5000+">5,000+ employees</option>
-                  </select>
-                </div>
+                <!-- Hidden fields -->
+                <input type="hidden" name="company" value="N/A" />
+
+                <!-- Hidden company size field -->
+                <input type="hidden" name="employees" value="" />
+
+               
 
                 <div class="space-y-2">
                   <label for="message" class="text-sm font-medium leading-none">How can we help? *</label>
@@ -160,23 +165,167 @@
             <div class="p-6 rounded-xl border border-border bg-card"><h3 class="text-lg font-semibold text-foreground mb-2">How quickly can we get started?</h3><p class="text-muted-foreground">Most organizations are up and running within 2-4 weeks. Our implementation team will guide you through the entire process.</p></div>
             <div class="p-6 rounded-xl border border-border bg-card"><h3 class="text-lg font-semibold text-foreground mb-2">Do you offer a free trial?</h3><p class="text-muted-foreground">Yes! We offer a 14-day free trial with full access to all features. No credit card required.</p></div>
             <div class="p-6 rounded-xl border border-border bg-card"><h3 class="text-lg font-semibold text-foreground mb-2">What kind of support do you provide?</h3><p class="text-muted-foreground">We offer 24/7 support via chat, email, and phone. Enterprise customers get a dedicated success manager.</p></div>
-            <div class="p-6 rounded-xl border border-border bg-card"><h3 class="text-lg font-semibold text-foreground mb-2">Can Learnify integrate with our existing systems?</h3><p class="text-muted-foreground">Absolutely. We integrate with 200+ tools including Salesforce, Workday, Microsoft 365, Slack, and more.</p></div>
+            <!-- <div class="p-6 rounded-xl border border-border bg-card"><h3 class="text-lg font-semibold text-foreground mb-2">Can Learnify integrate with our existing systems?</h3><p class="text-muted-foreground">Absolutely. We integrate with 200+ tools including Salesforce, Workday, Microsoft 365, Slack, and more.</p></div> -->
           </div>
         </div>
       </section>
 
-      <section class="py-20 bg-primary">
-        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-          <h2 class="text-3xl md:text-4xl font-bold text-primary-foreground mb-6">Ready to transform your learning?</h2>
-          <p class="text-xl text-primary-foreground/80 mb-8">Join thousands of organizations already using Learnify to upskill their workforce.</p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 rounded-md px-6">Book a Demo</a>
-            <a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground h-10 rounded-md px-6 bg-transparent text-primary-foreground border-primary-foreground hover:bg-primary-foreground hover:text-primary">Start Free Trial</a>
+<section class="py-24 bg-primary">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-2xl text-center">
+            <h2 class="text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl text-balance">Ready to Experience These Features?</h2>
+            <p class="mt-6 text-lg leading-8 text-primary-foreground/80">Join today and discover how AI can elevate and transform your educational content.</p>
+            <div class="mt-10 flex items-center justify-center gap-4 flex-wrap">
+              <!-- <a href="#" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 rounded-md px-6 has-[>svg]:px-4 text-base">Start free trial</a> -->
+              <a href="../contact/index.html" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 rounded-md px-6 has-[>svg]:px-4 text-base">Talk to sales</a>
+            </div>
           </div>
         </div>
       </section>
 
       <div data-site-footer></div>
     </main>
+
+    <style>
+      .shake {
+        animation: shake 0.5s;
+        border-color: #ef4444 !important;
+      }
+      
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+        20%, 40%, 60%, 80% { transform: translateX(10px); }
+      }
+    </style>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('[data-contact-form]');
+        const successDiv = document.querySelector('[data-contact-success]');
+        const contactAgainBtn = document.querySelector('[data-contact-again]');
+        const submitButton = form.querySelector('button[type="submit"]');
+        
+        function validateEmail(email) {
+          const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return re.test(email);
+        }
+        
+        function showError(input) {
+          input.classList.add('shake');
+          setTimeout(() => input.classList.remove('shake'), 500);
+        }
+        
+        function validateForm() {
+          const firstName = form.querySelector('[name="firstName"]');
+          const lastName = form.querySelector('[name="lastName"]');
+          const email = form.querySelector('[name="email"]');
+          const company = form.querySelector('[name="company"]');
+          const category = form.querySelector('[name="category"]');
+          const message = form.querySelector('[name="message"]');
+          
+          let isValid = true;
+          
+          if (!firstName.value.trim()) {
+            showError(firstName);
+            isValid = false;
+          }
+          
+          if (!lastName.value.trim()) {
+            showError(lastName);
+            isValid = false;
+          }
+          
+          if (!email.value.trim()) {
+            showError(email);
+            isValid = false;
+          } else if (!validateEmail(email.value)) {
+            showError(email);
+            isValid = false;
+          }
+          
+          // Company field is now hidden, skip validation
+          
+          if (!category.value.trim()) {
+            showError(category);
+            isValid = false;
+          }
+          
+          if (!message.value.trim()) {
+            showError(message);
+            isValid = false;
+          }
+          
+          return isValid;
+        }
+        
+        form.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          if (!validateForm()) {
+            return;
+          }
+          
+          // Change button state
+          const originalText = submitButton.innerHTML;
+          submitButton.innerHTML = '⏳ Sending...';
+          submitButton.disabled = true;
+          
+          try {
+            const formData = new FormData(form);
+            const firstName = formData.get('firstName');
+            const lastName = formData.get('lastName');
+            const fullName = `${firstName} ${lastName}`;
+            const email = formData.get('email');
+            const company = formData.get('company');
+            const jobTitle = formData.get('jobTitle') || '';
+            const employees = formData.get('employees') || '';
+            const message = formData.get('message');
+            const category = formData.get('category');
+            
+            const currentUrl = window.location.href;
+            
+            const data = {
+              "fullname": fullName,
+              "action": "sendBambooEmail",
+              "tab": category,
+              "title": jobTitle,
+              "url": currentUrl,
+              "email": email,
+              "content": message + "<br/><br/>"
+            };
+            
+            const response = await axios.post('https://api.sgedushare.com/uall/logs', data, {
+              withCredentials: true,
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            // Show success message
+            form.style.display = 'none';
+            successDiv.removeAttribute('hidden');
+            
+          } catch (error) {
+            console.error('Error sending message:', error);
+            
+            // Show error message
+            alert('Sorry, there was an error sending your message. Please try again later or contact us directly.');
+            
+          } finally {
+            // Reset button state
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+          }
+        });
+        
+        // Handle "send another message" button
+        contactAgainBtn.addEventListener('click', function() {
+          form.style.display = 'block';
+          successDiv.setAttribute('hidden', 'hidden');
+          form.reset();
+        });
+      });
+    </script>
   </body>
 </html>
