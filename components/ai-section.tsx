@@ -26,7 +26,7 @@ export function AISection() {
               results.
             </p>
             <Link href="#ai" className="inline-flex items-center gap-2 mt-8 text-primary font-medium hover:underline">
-              Learn more about Learnify AI
+              Learn more about BambooCloud
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

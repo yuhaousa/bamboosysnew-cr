@@ -8,7 +8,7 @@ const _inter = Inter({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Learnify AI - The #1 AI-Powered Learning Platform",
+  title: "BambooCloud - The #1 AI-Powered Learning Platform",
   description:
     "Transform enterprise learning with AI-powered personalization, intelligent content creation, and data-driven insights.",
   generator: "v0.app",

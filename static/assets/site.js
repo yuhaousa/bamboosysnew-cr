@@ -38,7 +38,7 @@
     { name: 'Features', target: 'features/index.html' },
     { name: 'AI Capabilities', target: 'ai-capabilities/index.html' },
     // { name: 'Integrations', target: 'integrations/index.html' },
-    { name: 'Enterprise', target: 'enterprise/index.html' },
+    { name: 'Solutions', target: 'enterprise/index.html' },
     { name: 'Case Studies', target: 'case-studies/index.html' },
     { name: 'About Us', target: 'about-us/index.html' },
     // { name: 'Contact Us', target: 'contact/index.html' },
@@ -150,37 +150,37 @@
       '<p class="mt-4 text-sm text-background/60 max-w-xs">The #1 AI-powered learning platform for enterprises worldwide.</p>' +
       '</div>' +
       '<div><h3 class="text-sm font-semibold text-background">Platform</h3><ul class="mt-4 space-y-3">' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Features</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Integrations</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">AI Capabilities</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Mobile App</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Security</a></li>' +
+      '<li><a href="' + joinPath(prefix, '/features/index.html') + '" class="text-sm text-background/60 hover:text-background transition-colors">Features</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Integrations</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">AI Capabilities</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Mobile App</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Security</a></li>' +
       '</ul></div>' +
       '<div><h3 class="text-sm font-semibold text-background">Solutions</h3><ul class="mt-4 space-y-3">' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Enterprise</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Small Business</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Education</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Government</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Healthcare</a></li>' +
+      '<li><a href="' + joinPath(prefix, '/enterprise/index.html') + '" class="text-sm text-background/60 hover:text-background transition-colors">BambooCloud Enterprise</a></li>' +
+      '<li><a href="' + joinPath(prefix, '/enterprise/k12.html') + '" class="text-sm text-background/60 hover:text-background transition-colors">BambooCloud K-12</a></li>' +
+      '<li><a href="' + joinPath(prefix, '/enterprise/h-ed.html') + '" class="text-sm text-background/60 hover:text-background transition-colors">BambooCloud H-ED</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Government</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Healthcare</a></li>' +
       '</ul></div>' +
       '<div><h3 class="text-sm font-semibold text-background">Resources</h3><ul class="mt-4 space-y-3">' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Blog</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Case Studies</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Webinars</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Documentation</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">API Reference</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Blog</a></li>' +
+      '<li><a href="' + joinPath(prefix, '/case-studies/index.html') + '" class="text-sm text-background/60 hover:text-background transition-colors">Case Studies</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Webinars</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Documentation</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">API Reference</a></li>' +
       '</ul></div>' +
       '<div><h3 class="text-sm font-semibold text-background">Company</h3><ul class="mt-4 space-y-3">' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">About Us</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Careers</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Press</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Partners</a></li>' +
-      '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Contact</a></li>' +
+      '<li><a href="' + joinPath(prefix, '/about-us/index.html') + '" class="text-sm text-background/60 hover:text-background transition-colors">About Us</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Careers</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Press</a></li>' +
+      // '<li><a href="#" class="text-sm text-background/60 hover:text-background transition-colors">Partners</a></li>' +
+      '<li><a href="' + joinPath(prefix, '/contact/index.html') + '" class="text-sm text-background/60 hover:text-background transition-colors">Contact</a></li>' +
       '</ul></div>' +
       '</div>' +
       '<div class="mt-16 pt-8 border-t border-background/10">' +
       '<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">' +
-      '<p class="text-sm text-background/60">© 2025 Learnify AI. All rights reserved.</p>' +
+      '<p class="text-sm text-background/60">© 2026 BambooCloud. All rights reserved.</p>' +
       '<div class="flex gap-6">' +
       '<a href="#" class="text-sm text-background/60 hover:text-background">Privacy Policy</a>' +
       '<a href="#" class="text-sm text-background/60 hover:text-background">Terms of Service</a>' +
