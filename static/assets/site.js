@@ -40,6 +40,7 @@
     // { name: 'Integrations', target: 'integrations/index.html' },
     { name: 'Enterprise', target: 'enterprise/index.html' },
     { name: 'Case Studies', target: 'case-studies/index.html' },
+    { name: 'About Us', target: 'about-us/index.html' },
     // { name: 'Contact Us', target: 'contact/index.html' },
   ]
 
@@ -99,7 +100,7 @@
 
     return (
       '<header class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">' +
-      '<nav class="mx-auto flex max-w-7xl items-center justify-between px-12 py-4 lg:px-16">' +
+      '<nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-16">' +
       '<div class="flex lg:flex-1">' +
       '<a href="' + joinPath(prefix, 'index.html') + '" class="flex items-center gap-2">' +
       '<img src="' + joinPath(prefix, 'images/bamboologo.png') + '" alt="Bamboo" class="h-16 w-auto" />' +
