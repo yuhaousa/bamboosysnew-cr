@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+  * { box-sizing: border-box; }
+}
+
+@layer components {
+  .container-content { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+  .section-padding { @apply py-16 md:py-24; }
+  .heading-xl { @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight; }
+  .heading-lg { @apply text-3xl md:text-4xl font-bold tracking-tight; }
+  .heading-md { @apply text-2xl md:text-3xl font-bold; }
+  .badge-section { @apply inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 dark:bg-brand-950/50 dark:text-brand-400 mb-4; }
+  .btn-hero-primary { @apply inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-white font-semibold hover:bg-brand-600 transition-all shadow-lg hover:shadow-brand-500/25 hover:-translate-y-0.5; }
+  .btn-hero-secondary { @apply inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold hover:border-brand-400 hover:text-brand-600 transition-all; }
+}
