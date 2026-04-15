@@ -71,7 +71,7 @@ onMounted(() => load())
 async function load() {
   isLoading.value = true; page.value = 1
   try {
-    const data = await api.get<{ logs: any[]; total: number }>(`/api/audit?resourceType=${resourceFilter.value}&limit=50`)
+    const data = await api.get<{ logs: any[]; total: number }>(`/audit?resourceType=${resourceFilter.value}&limit=50`)
     logs.value = data.logs ?? []
     hasMore.value = (data.logs?.length ?? 0) < (data.total ?? 0)
   } finally { isLoading.value = false }
@@ -79,7 +79,7 @@ async function load() {
 
 async function loadMore() {
   page.value++
-  const data = await api.get<{ logs: any[] }>(`/api/audit?resourceType=${resourceFilter.value}&limit=50&offset=${(page.value - 1) * 50}`)
+  const data = await api.get<{ logs: any[] }>(`/audit?resourceType=${resourceFilter.value}&limit=50&offset=${(page.value - 1) * 50}`)
   logs.value.push(...(data.logs ?? []))
 }
 

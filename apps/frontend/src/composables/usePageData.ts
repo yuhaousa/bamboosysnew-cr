@@ -21,9 +21,17 @@ export function usePageData() {
       blocks.value = d.blocks ?? []
       if (d.seo?.metaTitle) document.title = d.seo.metaTitle
       if (d.seo?.metaDescription) setMeta('description', d.seo.metaDescription)
-    } catch (e: any) {
-      error.value = e.message ?? 'Page not found'
-    } finally {
+      isLoading.value = false
+    } catch {
+      // If the requested 'home' slug doesn't exist, try to load the first published page
+      if (slug === 'home') {
+        try {
+          const all = await apiFetch<{ data: Array<{ slug: string }> }>('/api/public/pages')
+          const first = all.data?.[0]
+          if (first) { await loadBySlug(first.slug); return }
+        } catch {}
+      }
+      error.value = 'Page not found'
       isLoading.value = false
     }
   }

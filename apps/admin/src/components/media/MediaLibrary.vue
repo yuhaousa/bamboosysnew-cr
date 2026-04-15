@@ -8,7 +8,7 @@
       <input v-model="search" class="form-input pl-9" placeholder="Search media..." />
     </div>
     <!-- Grid -->
-    <div v-if="store.isLoading" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+    <div v-if="store.loading" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
       <div v-for="i in 12" :key="i" class="aspect-square rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse" />
     </div>
     <div v-else-if="filtered.length === 0" class="text-center py-16 text-gray-400">

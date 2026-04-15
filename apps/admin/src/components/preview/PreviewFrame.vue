@@ -33,6 +33,7 @@
           :key="refreshKey"
           class="w-full h-full border-0"
           sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+          @load="onIframeLoad"
         />
         <div v-else class="w-full h-full flex items-center justify-center text-gray-400 text-sm">
           Save the page to see a preview
@@ -43,10 +44,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { Monitor, Tablet, Smartphone, RotateCcw, ExternalLink } from 'lucide-vue-next'
+import type { Block } from '@shared/types'
 
-const props = defineProps<{ previewUrl?: string }>()
+const props = defineProps<{ previewUrl?: string; blocks?: Block[] }>()
 
 const iframeRef = ref<HTMLIFrameElement | null>(null)
 const currentWidth = ref('100%')
@@ -54,4 +56,26 @@ const refreshKey = ref(0)
 
 function setWidth(w: string) { currentWidth.value = w }
 function refresh() { refreshKey.value++ }
+
+function sendBlocks() {
+  if (!props.blocks || !iframeRef.value?.contentWindow) return
+  // Strip Vue reactive Proxy wrappers — postMessage requires plain cloneable objects
+  const plain = JSON.parse(JSON.stringify(props.blocks))
+  iframeRef.value.contentWindow.postMessage({ type: 'PREVIEW_BLOCKS', blocks: plain }, '*')
+}
+
+// When iframe signals it's ready, send the current blocks
+function onParentMessage(e: MessageEvent) {
+  if (e.data?.type === 'PREVIEW_READY') sendBlocks()
+}
+
+// iframe load: don't send yet — the Vue app inside isn't mounted yet.
+// The PREVIEW_READY handshake handles the initial send.
+function onIframeLoad() {}
+
+// Whenever blocks change (typing, add/delete), push to iframe immediately
+watch(() => props.blocks, sendBlocks, { deep: true })
+
+onMounted(() => window.addEventListener('message', onParentMessage))
+onUnmounted(() => window.removeEventListener('message', onParentMessage))
 </script>

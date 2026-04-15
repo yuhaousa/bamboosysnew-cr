@@ -21,12 +21,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import { usePageData } from '@/composables/usePageData'
-import type { BlockType } from '@shared/types'
+import type { Block, BlockType } from '@shared/types'
 
 import HeroBlock from '@/components/blocks/HeroBlock.vue'
 import ImageTextBlock from '@/components/blocks/ImageTextBlock.vue'
@@ -62,6 +62,30 @@ const blockMap: Record<string, any> = {
 const route = useRoute()
 const { blocks, isLoading, error, loadPreview } = usePageData()
 const pageId = route.params.pageId as string
-const visibleBlocks = computed(() => (blocks.value ?? []).filter(b => b.isVisible !== false))
-onMounted(() => loadPreview(pageId))
+
+// Live blocks pushed via postMessage from the admin editor
+const liveBlocks = ref<Block[] | null>(null)
+
+// Only use liveBlocks when it actually has entries (guards against race
+// condition where admin sends [] before the store finishes loading)
+const visibleBlocks = computed(() =>
+  (liveBlocks.value?.length ? liveBlocks.value : blocks.value ?? []).filter(b => b.isVisible !== false)
+)
+
+function handleMessage(e: MessageEvent) {
+  if (e.data?.type === 'PREVIEW_BLOCKS' && Array.isArray(e.data.blocks)) {
+    liveBlocks.value = e.data.blocks
+  }
+}
+
+onMounted(() => {
+  loadPreview(pageId)
+  window.addEventListener('message', handleMessage)
+  // Signal to the parent (PreviewFrame) that this page is ready to receive blocks
+  window.parent.postMessage({ type: 'PREVIEW_READY' }, '*')
+})
+
+onUnmounted(() => {
+  window.removeEventListener('message', handleMessage)
+})
 </script>

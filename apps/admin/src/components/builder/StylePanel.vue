@@ -3,7 +3,7 @@
     <div>
       <label class="form-label">Background Color</label>
       <div class="flex gap-2 items-center">
-        <input type="color" v-model="local.backgroundColor" @change="emit" class="w-10 h-10 rounded cursor-pointer border border-gray-300 dark:border-gray-600 p-0.5" />
+        <input type="color" v-model="local.backgroundColor" @input="emit" class="w-10 h-10 rounded cursor-pointer border border-gray-300 dark:border-gray-600 p-0.5" />
         <input type="text" v-model="local.backgroundColor" @input="emit" class="form-input flex-1" placeholder="#ffffff or transparent" />
         <button @click="local.backgroundColor = ''; emit()" class="btn-ghost p-2">
           <X class="w-4 h-4" />
@@ -14,7 +14,7 @@
     <div>
       <label class="form-label">Text Color</label>
       <div class="flex gap-2 items-center">
-        <input type="color" v-model="local.textColor" @change="emit" class="w-10 h-10 rounded cursor-pointer border border-gray-300 dark:border-gray-600 p-0.5" />
+        <input type="color" v-model="local.textColor" @input="emit" class="w-10 h-10 rounded cursor-pointer border border-gray-300 dark:border-gray-600 p-0.5" />
         <input type="text" v-model="local.textColor" @input="emit" class="form-input flex-1" placeholder="#000000" />
         <button @click="local.textColor = ''; emit()" class="btn-ghost p-2">
           <X class="w-4 h-4" />

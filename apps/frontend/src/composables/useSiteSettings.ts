@@ -9,14 +9,14 @@ export function useSiteSettings() {
   async function load() {
     if (loaded.value) return
     try {
-      const data = await apiFetch<{ settings: SiteSettings }>('/api/public/settings')
-      settings.value = data.settings
+      const data = await apiFetch<{ data: Record<string, any> }>('/api/public/settings')
+      settings.value = data.data as any
       loaded.value = true
       // Apply theme color as CSS var
-      if (settings.value?.theme?.primaryColor) {
-        document.documentElement.style.setProperty('--color-brand', settings.value.theme.primaryColor)
+      if ((settings.value as any)?.theme?.primaryColor) {
+        document.documentElement.style.setProperty('--color-brand', (settings.value as any).theme.primaryColor)
       }
-      if (settings.value?.general?.maintenanceMode) {
+      if ((settings.value as any)?.general?.maintenanceMode) {
         window.location.href = '/maintenance'
       }
     } catch {}

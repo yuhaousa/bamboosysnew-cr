@@ -44,9 +44,10 @@
         <div v-if="!selectedBlock">
           <BlockList
             :blocks="blocksStore.blocks"
-            :selected-id="selectedBlockId"
+            :selected-block-id="selectedBlockId"
+            :page-id="pageId"
             @select="selectBlock"
-            @add="showBlockPicker = true"
+            @add-block="showBlockPicker = true"
             @delete="deleteBlock"
             @duplicate="duplicateBlock"
             @toggle-visibility="toggleVisibility"
@@ -77,12 +78,12 @@
 
       <!-- Right: Preview -->
       <div class="flex-1 overflow-hidden">
-        <PreviewFrame :preview-url="previewUrl" />
+        <PreviewFrame :preview-url="previewUrl" :blocks="blocksStore.blocks" />
       </div>
     </div>
 
     <!-- Block Picker Modal -->
-    <BlockPicker :open="showBlockPicker" @close="showBlockPicker = false" @select="addBlock" />
+    <BlockPicker v-model="showBlockPicker" @select="addBlock" />
 
     <!-- Revisions panel via modal -->
     <AppModal v-model="showRevisions" title="Page Revisions" size="lg">
@@ -101,7 +102,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import {
   ArrowLeft, Save, Globe, EyeOff, Eye, History, Search, ChevronLeft
@@ -159,7 +160,7 @@ onMounted(async () => {
 
 async function loadRevisions() {
   try {
-    const data = await api.get<{ revisions: PageRevision[] }>(`/api/revisions/${pageId}`)
+    const data = await api.get<{ revisions: PageRevision[] }>(`/revisions/${pageId}`)
     revisions.value = data.revisions ?? []
   } catch {}
 }
@@ -172,7 +173,7 @@ async function addBlock(type: BlockType) {
     type,
     content: getDefaultContent(type),
     styles: getDefaultStyles(),
-    order: blocksStore.blocks.length,
+    sortOrder: blocksStore.blocks.length,
     isVisible: true,
   })
   selectedBlockId.value = newBlock.id
@@ -199,22 +200,37 @@ async function toggleVisibility(id: string) {
   isDirty.value = true
 }
 
-async function reorderBlocks(blocks: Block[]) {
-  await blocksStore.reorderBlocks(pageId, blocks.map(b => b.id))
+async function reorderBlocks(order: { id: string; sortOrder: number }[]) {
+  await blocksStore.reorderBlocks(pageId, order)
   isDirty.value = true
 }
 
-async function updateBlockContent(content: BlockContent) {
+// Pending block changes — only written to DB when user clicks Save
+const pendingBlockChanges = new Map<string, Partial<Block>>()
+
+function updateBlockContent(content: BlockContent) {
   if (!selectedBlock.value) return
-  await blocksStore.updateBlock(pageId, selectedBlock.value.id, { content })
+  // Update local state immediately so preview reflects now
+  const block = blocksStore.blocks.find(b => b.id === selectedBlock.value!.id)
+  if (block) block.content = content as Block['content']
   isDirty.value = true
+  // Stage the change — do NOT call API yet (would update the live published page)
+  const id = selectedBlock.value.id
+  pendingBlockChanges.set(id, { ...pendingBlockChanges.get(id), content })
 }
 
-async function updateBlockStyles(styles: BlockStyles) {
+function updateBlockStyles(styles: BlockStyles) {
   if (!selectedBlock.value) return
-  await blocksStore.updateBlock(pageId, selectedBlock.value.id, { styles })
+  const block = blocksStore.blocks.find(b => b.id === selectedBlock.value!.id)
+  if (block) block.styles = styles
   isDirty.value = true
+  const id = selectedBlock.value.id
+  pendingBlockChanges.set(id, { ...pendingBlockChanges.get(id), styles })
 }
+
+onUnmounted(() => {
+  pendingBlockChanges.clear()
+})
 
 async function updateBlockVisibility(isVisible: boolean) {
   if (!selectedBlock.value) return
@@ -225,6 +241,14 @@ async function savePage() {
   if (!page.value) return
   saving.value = true
   try {
+    // Flush all pending block content/style changes to DB
+    await Promise.all(
+      Array.from(pendingBlockChanges.entries()).map(([id, changes]) =>
+        blocksStore.updateBlock(pageId, id, changes)
+      )
+    )
+    pendingBlockChanges.clear()
+
     await pagesStore.updatePage(pageId, {
       title: page.value.title,
       slug: page.value.slug,
@@ -253,7 +277,7 @@ async function unpublishPage() {
 }
 
 async function restoreRevision(revId: string) {
-  await api.post(`/api/revisions/${pageId}/${revId}/restore`, {})
+  await api.post(`/revisions/${pageId}/${revId}/restore`, {})
   await blocksStore.fetchBlocks(pageId)
   showRevisions.value = false
   toast.success('Revision restored')

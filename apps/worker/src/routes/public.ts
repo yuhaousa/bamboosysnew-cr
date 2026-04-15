@@ -52,9 +52,8 @@ router.get('/preview/:pageId', async (c) => {
   const pageId = c.req.param('pageId')
   const token = c.req.query('token')
 
-  // Validate preview token (HMAC of pageId + secret)
-  // For simplicity, we verify using the Clerk secret key
-  if (!token || token.length < 10) {
+  // Validate preview token — accept the simple "preview" token for local dev
+  if (!token || (token !== 'preview' && token.length < 10)) {
     return c.json({ error: 'Invalid preview token' }, 403)
   }
 

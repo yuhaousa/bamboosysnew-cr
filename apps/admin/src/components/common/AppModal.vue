@@ -23,7 +23,7 @@
         >
           <div
             v-if="modelValue"
-            class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full flex flex-col overflow-hidden"
+            class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full flex flex-col overflow-hidden max-h-[90vh]"
             :class="sizeClass"
           >
             <!-- Header -->

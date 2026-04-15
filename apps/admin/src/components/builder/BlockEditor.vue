@@ -40,13 +40,13 @@
                 <p class="text-xs text-gray-500 mt-0.5">Toggle whether this block is visible on the page</p>
               </div>
               <button
-                @click="$emit('toggle-visibility')"
+                @click="$emit('update-visibility', !props.block?.isVisible)"
                 class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none"
-                :class="block.visibility ? 'bg-brand-600' : 'bg-gray-300 dark:bg-gray-600'"
+                :class="block.isVisible ? 'bg-brand-600' : 'bg-gray-300 dark:bg-gray-600'"
               >
                 <span
                   class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow"
-                  :class="block.visibility ? 'translate-x-6' : 'translate-x-1'"
+                  :class="block.isVisible ? 'translate-x-6' : 'translate-x-1'"
                 />
               </button>
             </div>
@@ -76,7 +76,7 @@ const props = defineProps<{
 defineEmits<{
   'update-content': [unknown]
   'update-styles': [unknown]
-  'toggle-visibility': []
+  'update-visibility': [boolean]
 }>()
 
 const activeTab = ref('content')
