@@ -68,7 +68,6 @@ export interface BlockButton {
 }
 
 export interface BlockStyles {
-  variant?: 'light' | 'dark' | 'glass' | 'gradient'
   backgroundColor?: string
   textColor?: string
   backgroundImage?: string
@@ -400,9 +399,6 @@ export interface ThemeConfig {
   headerBgColor?: string
   navCtaText?: string
   navCtaLink?: string
-  navShowLanguage?: boolean
-  navLanguageText?: string
-  logoShape?: 'circle' | 'none'
   logoUrl?: string
   faviconUrl?: string
   footerText?: string

@@ -12,7 +12,7 @@
           >{{ content.badge }}</span>
           <h2 v-if="content.title" class="heading-lg" :class="isDark ? 'text-white' : 'text-gray-900 dark:text-white'">{{ content.title }}</h2>
           <p v-if="content.subtitle" class="text-lg font-semibold" :style="{ color: 'var(--color-primary)' }">{{ content.subtitle }}</p>
-          <div v-if="content.description" class="leading-relaxed" :class="isDark ? 'text-gray-300' : 'text-gray-600 dark:text-gray-400'" v-html="richDescription" />
+          <p v-if="content.description" class="leading-relaxed whitespace-pre-line" :class="isDark ? 'text-gray-300' : 'text-gray-600 dark:text-gray-400'">{{ content.description }}</p>
           <div v-if="content.bullets?.length" class="space-y-2">
             <div v-for="b in content.bullets" :key="b" class="flex items-start gap-2">
               <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
@@ -34,16 +34,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ImageTextContent, BlockStyles } from '@shared/types'
-import { useBlockVariant } from '@/composables/useBlockVariant'
 const props = defineProps<{ content: ImageTextContent; styles?: BlockStyles; reverse?: boolean }>()
-const { isDark, sectionStyle } = useBlockVariant(() => props.styles)
-// Parse simple markdown: **bold** → <strong>, newlines → <br>
-const richDescription = computed(() => {
-  const text = props.content.description
-  if (!text) return ''
-  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  return escaped
-    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-current">$1</strong>')
-    .replace(/\n/g, '<br>')
+const isDark = computed(() => {
+  const bg = props.styles?.backgroundColor
+  if (!bg || !bg.startsWith('#') || bg.length < 7) return false
+  const r = parseInt(bg.slice(1, 3), 16); const g = parseInt(bg.slice(3, 5), 16); const b = parseInt(bg.slice(5, 7), 16)
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5
 })
+const sectionStyle = computed(() => ({
+  backgroundColor: props.styles?.backgroundColor || undefined,
+  paddingTop: props.styles?.paddingTop || undefined,
+  paddingBottom: props.styles?.paddingBottom || undefined,
+}))
 </script>

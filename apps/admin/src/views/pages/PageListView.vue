@@ -14,7 +14,7 @@
     <!-- Homepage indicator -->
     <div v-if="homePage" class="flex items-center gap-2 px-4 py-2.5 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg text-sm text-blue-700 dark:text-blue-300">
       <Home class="w-4 h-4 flex-shrink-0" />
-      <span>Homepage is <strong>{{ homePage.title }}</strong> → <code class="font-mono text-xs">localhost:8002/</code> loads this page.</span>
+      <span>Homepage is <strong>{{ homePage.title }}</strong> → <code class="font-mono text-xs">localhost:5173/</code> loads this page.</span>
     </div>
     <div v-else class="flex items-center gap-2 px-4 py-2.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg text-sm text-amber-700 dark:text-amber-300">
       <Home class="w-4 h-4 flex-shrink-0" />
@@ -69,9 +69,16 @@
             </td>
             <td class="px-4 py-3 text-gray-500 hidden md:table-cell font-mono text-xs">/{{ page.slug }}</td>
             <td class="px-4 py-3">
-              <span :class="page.status === 'published' ? 'badge-green' : page.status === 'draft' ? 'badge-yellow' : 'badge-gray'" class="badge">
-                {{ page.status }}
-              </span>
+              <button
+                @click="toggleStatus(page)"
+                :disabled="togglingId === page.id"
+                :title="page.status === 'published' ? 'Click to unpublish' : 'Click to publish'"
+                :class="page.status === 'published' ? 'badge-green' : page.status === 'draft' ? 'badge-yellow' : 'badge-gray'"
+                class="badge cursor-pointer hover:opacity-75 transition-opacity disabled:opacity-50"
+              >
+                <span v-if="togglingId === page.id" class="inline-block w-2.5 h-2.5 border border-current border-t-transparent rounded-full animate-spin" />
+                <template v-else>{{ page.status }}</template>
+              </button>
             </td>
             <td class="px-4 py-3 text-gray-400 text-xs hidden lg:table-cell">{{ formatDate(page.updatedAt) }}</td>
             <td class="px-4 py-3">
@@ -155,6 +162,7 @@ const toast = useToast()
 
 const search = ref('')
 const statusFilter = ref('')
+const togglingId = ref<string | null>(null)
 const homePage = computed(() => store.pages.find(p => p.slug === 'home'))
 const showCreate = ref(false)
 const showDeleteConfirm = ref(false)
@@ -199,6 +207,22 @@ async function doSetHomepage(page: Page) {
     toast.success(`"${page.title}" is now the homepage`)
   } catch (e: unknown) {
     toast.error(e instanceof Error ? e.message : 'Failed to set homepage')
+  }
+}
+
+async function toggleStatus(page: Page) {
+  if (page.status !== 'published' && page.status !== 'draft') return
+  togglingId.value = page.id
+  try {
+    if (page.status === 'published') {
+      await store.unpublishPage(page.id)
+      toast.success('Moved to draft')
+    } else {
+      await store.publishPage(page.id)
+      toast.success('Page published!')
+    }
+  } finally {
+    togglingId.value = null
   }
 }
 

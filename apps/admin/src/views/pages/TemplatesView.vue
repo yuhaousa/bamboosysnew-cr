@@ -31,12 +31,6 @@
             </span>
           </div>
 
-          <!-- Auto-theme badge -->
-          <div v-if="tpl.themeSettings" class="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg px-2.5 py-1.5">
-            <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
-            Auto-applies theme settings
-          </div>
-
           <button
             @click="createFromTemplate(tpl)"
             :disabled="creating === tpl.id"
@@ -71,7 +65,6 @@ interface Template {
   blockLabels: string[]
   slug: string
   blocks: { type: string; content: Record<string, unknown>; styles: Record<string, unknown> }[]
-  themeSettings?: Record<string, unknown>
 }
 
 const templates: Template[] = [
@@ -327,35 +320,24 @@ const templates: Template[] = [
     name: 'EduLink — Dark Pro',
     category: 'Education',
     description: 'Dark-themed education platform with gold accents, services grid, global network section, and contact form.',
-    previewImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
+    previewImage: 'https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80',
     slug: 'edulink',
     blockLabels: ['Hero', 'About + Stats', 'Services Grid', 'Global Network', 'Contact Form'],
-    themeSettings: {
-      primaryColor: '#2563eb',
-      secondaryColor: '#1d4ed8',
-      headerStyle: 'dark',
-      headerBgColor: '#0d1117',
-      navCtaText: 'Get Started',
-      navCtaLink: '#contact',
-      navShowLanguage: true,
-      navLanguageText: 'EN',
-      logoShape: 'circle',
-    },
     blocks: [
       {
         type: 'hero_banner',
         content: {
           badge: 'Global EdTech Platform',
-          title: 'Connecting Education with the World',
+          title: 'Connecting Education\nwith the World',
           titleColor: '#ffffff',
           subtitle: '',
           description: 'From local learning to global reach — we provide comprehensive educational technology solutions including online courses, personalized learning paths, and international certification programs.',
-          descriptionColor: '#9ca3af',
+          descriptionColor: '#d1d5db',
           buttons: [
             { id: uuid(), text: 'Start Learning →', link: '#courses', variant: 'primary', openInNewTab: false },
             { id: uuid(), text: 'Explore Courses', link: '#about', variant: 'secondary', openInNewTab: false },
           ],
-          backgroundImage: { url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80', alt: 'Education global' },
+          backgroundImage: { url: 'https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1600&q=80', alt: 'Education global' },
         },
         styles: { backgroundColor: '#0d1117', paddingTop: '120px', paddingBottom: '120px', alignment: 'center' },
       },
@@ -450,19 +432,7 @@ async function createFromTemplate(tpl: Template) {
       })
     }
 
-    // Auto-apply theme settings if template has them (merge with existing)
-    if (tpl.themeSettings) {
-      try {
-        const currentThemeRes = await api.get<{ data: Record<string, unknown> }>('/settings/theme')
-        const merged = { ...(currentThemeRes.data ?? {}), ...tpl.themeSettings }
-        await api.put('/settings/theme', merged)
-        toast.success(`"${tpl.name}" created! Theme auto-applied.`)
-      } catch {
-        toast.success(`"${tpl.name}" page created!`)
-      }
-    } else {
-      toast.success(`"${tpl.name}" page created!`)
-    }
+    toast.success(`"${tpl.name}" page created!`)
     router.push(`/pages/${pageId}/edit`)
   } catch (err) {
     toast.error('Failed to create page from template')

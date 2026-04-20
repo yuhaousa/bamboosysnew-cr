@@ -80,120 +80,93 @@
     </div>
 
     <!-- Theme -->
-    <div v-if="activeTab === 'theme'" class="space-y-6 max-w-2xl">
+    <div v-if="activeTab === 'theme'" class="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
-      <!-- Preset themes -->
-      <div class="card space-y-4">
-        <h2 class="font-semibold text-gray-800 dark:text-gray-200">Preset Themes</h2>
-        <p class="text-sm text-gray-500">Click a theme to instantly apply its color palette.</p>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <!-- LEFT: Preset themes (wider) -->
+      <div class="xl:col-span-2 card space-y-4">
+        <div>
+          <h2 class="font-semibold text-gray-800 dark:text-gray-200">Preset Themes</h2>
+          <p class="text-sm text-gray-400 mt-0.5">Click a theme to instantly apply it.</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           <button
             v-for="preset in presetThemes" :key="preset.name"
             @click="applyPreset(preset)"
-            class="group relative rounded-xl overflow-hidden border-2 transition-all hover:scale-105 hover:shadow-lg"
-            :class="theme.primaryColor === preset.primaryColor ? 'border-gray-900 dark:border-white shadow-md' : 'border-gray-200 dark:border-gray-700'"
+            class="group relative rounded-xl overflow-hidden border-2 transition-all hover:scale-[1.03] hover:shadow-lg"
+            :class="theme.primaryColor === preset.primaryColor ? 'border-brand-500 shadow-md' : 'border-gray-200 dark:border-gray-700'"
           >
-            <!-- Color swatches -->
-            <div class="flex h-12">
+            <div class="flex h-10">
               <div class="flex-1" :style="{ background: preset.bgColor }" />
               <div class="flex-1" :style="{ background: preset.primaryColor }" />
               <div class="flex-1" :style="{ background: preset.accentColor }" />
             </div>
-            <div class="p-2 bg-white dark:bg-gray-900">
-              <p class="text-xs font-semibold text-gray-800 dark:text-gray-200">{{ preset.name }}</p>
-              <p class="text-xs text-gray-400">{{ preset.description }}</p>
+            <div class="p-2 bg-white dark:bg-gray-900 text-left">
+              <p class="text-xs font-semibold text-gray-800 dark:text-gray-200 leading-tight">{{ preset.name }}</p>
+              <p class="text-[10px] text-gray-400 leading-tight mt-0.5">{{ preset.description }}</p>
             </div>
             <span v-if="theme.primaryColor === preset.primaryColor"
-              class="absolute top-1.5 right-1.5 w-4 h-4 bg-gray-900 dark:bg-white rounded-full flex items-center justify-center">
-              <Check class="w-2.5 h-2.5 text-white dark:text-gray-900" />
+              class="absolute top-1.5 right-1.5 w-4 h-4 bg-brand-500 rounded-full flex items-center justify-center shadow">
+              <Check class="w-2.5 h-2.5 text-white" />
             </span>
+            <div v-if="saving && theme.primaryColor === preset.primaryColor" class="absolute inset-0 bg-white/50 dark:bg-black/50 flex items-center justify-center">
+              <div class="w-4 h-4 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
+            </div>
           </button>
         </div>
+        <p class="text-xs text-gray-400">Selecting a preset instantly saves and applies it to your site.</p>
       </div>
 
-      <!-- Custom colors -->
-      <div class="card space-y-5">
-        <h2 class="font-semibold text-gray-800 dark:text-gray-200">Custom Colors</h2>
-        <div class="grid grid-cols-2 gap-4">
+      <!-- RIGHT: Custom settings -->
+      <div class="space-y-4">
+
+        <!-- Colors -->
+        <div class="card space-y-4">
+          <h2 class="font-semibold text-gray-800 dark:text-gray-200 text-sm">Custom Colors</h2>
           <div>
             <label class="form-label">Primary Color</label>
             <div class="flex gap-2">
-              <input v-model="theme.primaryColor" type="color" class="h-10 w-14 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer" />
+              <input v-model="theme.primaryColor" type="color" class="h-9 w-12 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer" />
               <input v-model="theme.primaryColor" class="form-input flex-1 font-mono text-sm" placeholder="#4f46e5" />
             </div>
           </div>
           <div>
-            <label class="form-label">Secondary / Accent Color</label>
+            <label class="form-label">Secondary Color</label>
             <div class="flex gap-2">
-              <input v-model="theme.secondaryColor" type="color" class="h-10 w-14 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer" />
+              <input v-model="theme.secondaryColor" type="color" class="h-9 w-12 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer" />
               <input v-model="theme.secondaryColor" class="form-input flex-1 font-mono text-sm" placeholder="#10b981" />
             </div>
           </div>
         </div>
-        <div>
-          <label class="form-label">Logo URL</label>
-          <input v-model="theme.logoUrl" class="form-input" />
-        </div>
-        <div>
-          <label class="form-label">Favicon URL</label>
-          <input v-model="theme.faviconUrl" class="form-input" />
-        </div>
-        <div>
-          <label class="form-label">Footer Text</label>
-          <input v-model="theme.footerText" class="form-input" placeholder="© 2025 My Company" />
-        </div>
 
-        <!-- Header Style -->
-        <div>
-          <label class="form-label">Header Style</label>
-          <div class="flex gap-2">
-            <button
-              @click="theme.headerStyle = 'light'"
-              :class="theme.headerStyle === 'light' ? 'ring-2 ring-brand-500' : 'opacity-60 hover:opacity-100'"
-              class="flex-1 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white text-gray-800 text-sm font-medium transition-all"
-            >
-              ☀️ Light Header
-            </button>
-            <button
-              @click="theme.headerStyle = 'dark'"
-              :class="theme.headerStyle === 'dark' ? 'ring-2 ring-brand-500' : 'opacity-60 hover:opacity-100'"
-              class="flex-1 py-3 rounded-xl border border-gray-700 bg-gray-900 text-white text-sm font-medium transition-all"
-            >
-              🌙 Dark Header
-            </button>
+        <!-- Header -->
+        <div class="card space-y-4">
+          <h2 class="font-semibold text-gray-800 dark:text-gray-200 text-sm">Header & Navigation</h2>
+          <div>
+            <label class="form-label">Header Style</label>
+            <div class="flex gap-2">
+              <button
+                @click="theme.headerStyle = 'light'"
+                :class="theme.headerStyle === 'light' ? 'ring-2 ring-brand-500 opacity-100' : 'opacity-50 hover:opacity-80'"
+                class="flex-1 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white text-gray-800 text-xs font-medium transition-all"
+              >
+                ☀️ Light
+              </button>
+              <button
+                @click="theme.headerStyle = 'dark'"
+                :class="theme.headerStyle === 'dark' ? 'ring-2 ring-brand-500 opacity-100' : 'opacity-50 hover:opacity-80'"
+                class="flex-1 py-2 rounded-lg border border-gray-700 bg-gray-900 text-white text-xs font-medium transition-all"
+              >
+                🌙 Dark
+              </button>
+            </div>
           </div>
-        </div>
-        <div v-if="theme.headerStyle === 'dark'">
-          <label class="form-label">Header Background Color</label>
-          <div class="flex gap-2">
-            <input v-model="theme.headerBgColor" type="color" class="h-10 w-14 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer" />
-            <input v-model="theme.headerBgColor" class="form-input flex-1 font-mono text-sm" placeholder="#0d1117" />
+          <div v-if="theme.headerStyle === 'dark'">
+            <label class="form-label">Header BG Color</label>
+            <div class="flex gap-2">
+              <input v-model="theme.headerBgColor" type="color" class="h-9 w-12 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer" />
+              <input v-model="theme.headerBgColor" class="form-input flex-1 font-mono text-sm" placeholder="#0d1117" />
+            </div>
           </div>
-        </div>
-
-        <!-- Logo Icon Shape -->
-        <div>
-          <label class="form-label">Logo Icon (when no image uploaded)</label>
-          <div class="flex gap-2">
-            <button
-              @click="theme.logoShape = 'circle'"
-              :class="theme.logoShape !== 'none' ? 'ring-2 ring-brand-500' : 'opacity-60 hover:opacity-100'"
-              class="flex-1 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium transition-all"
-            >
-              🔵 Circle with Initials
-            </button>
-            <button
-              @click="theme.logoShape = 'none'"
-              :class="theme.logoShape === 'none' ? 'ring-2 ring-brand-500' : 'opacity-60 hover:opacity-100'"
-              class="flex-1 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium transition-all"
-            >
-              Ⓐ Text Only
-            </button>
-          </div>
-        </div>
-
-        <!-- Nav CTA Button -->
-        <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="form-label">Nav CTA Button Text</label>
             <input v-model="theme.navCtaText" class="form-input" placeholder="Get Started" />
@@ -204,25 +177,26 @@
           </div>
         </div>
 
-        <!-- Language Selector -->
-        <div>
-          <label class="form-label">Language Selector in Header</label>
-          <div class="flex items-center gap-4">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" v-model="theme.navShowLanguage" class="rounded" />
-              <span class="text-sm text-gray-700 dark:text-gray-300">Show language selector (Globe icon)</span>
-            </label>
-            <input
-              v-if="theme.navShowLanguage"
-              v-model="theme.navLanguageText"
-              class="form-input w-20 text-sm"
-              placeholder="EN"
-              maxlength="5"
-            />
+        <!-- Identity -->
+        <div class="card space-y-4">
+          <h2 class="font-semibold text-gray-800 dark:text-gray-200 text-sm">Site Identity</h2>
+          <div>
+            <label class="form-label">Logo URL</label>
+            <input v-model="theme.logoUrl" class="form-input" placeholder="https://..." />
+          </div>
+          <div>
+            <label class="form-label">Favicon URL</label>
+            <input v-model="theme.faviconUrl" class="form-input" placeholder="https://..." />
+          </div>
+          <div>
+            <label class="form-label">Footer Text</label>
+            <input v-model="theme.footerText" class="form-input" placeholder="© 2025 My Company" />
           </div>
         </div>
 
-        <button @click="saveTheme" :disabled="saving" class="btn btn-primary">Save Theme</button>
+        <button @click="saveTheme" :disabled="saving" class="btn btn-primary w-full">
+          {{ saving ? 'Saving...' : 'Save Custom Settings' }}
+        </button>
       </div>
     </div>
 
@@ -268,7 +242,7 @@ const presetThemes: PresetTheme[] = [
   { name: 'Violet Studio', description: 'Luxe & creative', primaryColor: '#7c3aed', secondaryColor: '#8b5cf6', accentColor: '#c4b5fd', bgColor: '#faf5ff' },
   { name: 'Teal Ocean', description: 'Calm & trustworthy', primaryColor: '#0d9488', secondaryColor: '#14b8a6', accentColor: '#5eead4', bgColor: '#f0fdfa' },
   { name: 'Orange Buzz', description: 'Fun & youthful', primaryColor: '#ea580c', secondaryColor: '#f97316', accentColor: '#fdba74', bgColor: '#fff7ed' },
-  { name: 'Dark Blue', description: 'Education & pro', primaryColor: '#2563eb', secondaryColor: '#1d4ed8', accentColor: '#60a5fa', bgColor: '#0d1117', headerStyle: 'dark', headerBgColor: '#0d1117' },
+  { name: 'Dark Gold', description: 'Education & pro', primaryColor: '#f59e0b', secondaryColor: '#d97706', accentColor: '#fbbf24', bgColor: '#0d1117', headerStyle: 'dark', headerBgColor: '#0d1117' },
   { name: 'Dark Navy', description: 'Tech & enterprise', primaryColor: '#3b82f6', secondaryColor: '#2563eb', accentColor: '#93c5fd', bgColor: '#0f172a', headerStyle: 'dark', headerBgColor: '#0f172a' },
   { name: 'Dark Purple', description: 'Creative & luxury', primaryColor: '#a855f7', secondaryColor: '#9333ea', accentColor: '#d8b4fe', bgColor: '#0c0a1a', headerStyle: 'dark', headerBgColor: '#0c0a1a' },
 ]
@@ -276,7 +250,7 @@ const presetThemes: PresetTheme[] = [
 const general = reactive({ siteName: '', tagline: '', contactEmail: '', contactPhone: '', address: '', maintenanceMode: false })
 const seo = reactive({ metaTitle: '', metaDescription: '', ogImage: '', googleAnalyticsId: '' })
 const social = reactive({ facebook: '', twitter: '', instagram: '', linkedin: '', youtube: '' })
-const theme = reactive({ primaryColor: '#4f46e5', secondaryColor: '#10b981', logoUrl: '', faviconUrl: '', footerText: '', headerStyle: 'light' as 'light' | 'dark', headerBgColor: '#0d1117', logoShape: 'circle' as 'circle' | 'none', navCtaText: '', navCtaLink: '', navShowLanguage: false, navLanguageText: 'EN' })
+const theme = reactive({ primaryColor: '#4f46e5', secondaryColor: '#10b981', logoUrl: '', faviconUrl: '', footerText: '', headerStyle: 'light' as 'light' | 'dark', headerBgColor: '#0d1117', navCtaText: '', navCtaLink: '' })
 
 const socialPlatforms = [
   { key: 'facebook', label: 'Facebook', placeholder: 'https://facebook.com/...' },

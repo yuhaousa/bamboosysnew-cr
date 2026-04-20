@@ -3,7 +3,7 @@
     <AdminSidebar :collapsed="sidebarCollapsed" @toggle="sidebarCollapsed = !sidebarCollapsed" />
     <AdminTopbar :sidebar-collapsed="sidebarCollapsed" @toggle-sidebar="sidebarCollapsed = !sidebarCollapsed" />
     <main
-      class="transition-all duration-200 pt-16 min-h-screen"
+      class="transition-all duration-200 pt-14 min-h-screen"
       :style="{ marginLeft: sidebarCollapsed ? '64px' : '256px' }"
     >
       <RouterView />

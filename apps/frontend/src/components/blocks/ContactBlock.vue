@@ -8,13 +8,7 @@
             class="inline-block px-3 py-1 text-xs font-semibold rounded-full tracking-wider uppercase"
             :style="{ color: 'var(--color-primary)', border: '1px solid var(--color-primary)', backgroundColor: 'color-mix(in srgb, var(--color-primary) 12%, transparent)' }"
           >{{ content.badge }}</span>
-          <h2 class="heading-lg" :class="isDark ? 'text-white' : 'text-gray-900 dark:text-white'">
-            <template v-if="titleLines.length > 1">
-              <span>{{ titleLines.slice(0, -1).join(' ') }}</span><br />
-              <span :style="isDark ? { color: 'var(--color-primary)' } : {}">{{ titleLines[titleLines.length - 1] }}</span>
-            </template>
-            <template v-else>{{ content.title }}</template>
-          </h2>
+          <h2 class="heading-lg" :class="isDark ? 'text-white' : 'text-gray-900 dark:text-white'">{{ content.title }}</h2>
           <p v-if="content.description" class="leading-relaxed" :class="isDark ? 'text-gray-300' : 'text-gray-600 dark:text-gray-400'">{{ content.description }}</p>
           <div class="space-y-4">
             <a v-if="content.email" :href="`mailto:${content.email}`"
@@ -50,7 +44,7 @@
         <!-- Form side -->
         <div v-if="content.showForm !== false"
           class="rounded-2xl border p-6"
-          :class="cardClass"
+          :class="isDark ? 'border-white/10 bg-white/5' : 'bg-white dark:bg-gray-800/50 border-gray-200 dark:border-gray-700'"
         >
           <h3 class="font-semibold mb-5" :class="isDark ? 'text-white' : 'text-gray-900 dark:text-white'">{{ content.formTitle ?? 'Send us a message' }}</h3>
           <form @submit.prevent="submitForm" class="space-y-4">
@@ -97,7 +91,7 @@
                 placeholder="Tell us about your requirements..." required />
             </div>
             <button type="submit" class="w-full py-3 rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2" :disabled="submitted"
-              :style="{ backgroundColor: 'var(--color-primary)', color: 'var(--color-primary-fg, #ffffff)' }"
+              :style="{ backgroundColor: 'var(--color-primary)', color: '#000' }"
             >
               {{ submitted ? 'Message Sent! ✓' : (content.formButtonText ?? 'Submit Inquiry →') }}
             </button>
@@ -110,10 +104,18 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { ContactSectionContent, BlockStyles } from '@shared/types'
-import { useBlockVariant } from '@/composables/useBlockVariant'
 const props = defineProps<{ content: ContactSectionContent; styles?: BlockStyles }>()
-const { isDark, sectionStyle, cardClass } = useBlockVariant(() => props.styles)
-const titleLines = computed(() => (props.content.title ?? '').split('\n').filter(Boolean))
+const isDark = computed(() => {
+  const bg = props.styles?.backgroundColor
+  if (!bg || !bg.startsWith('#') || bg.length < 7) return false
+  const r = parseInt(bg.slice(1, 3), 16); const g = parseInt(bg.slice(3, 5), 16); const b = parseInt(bg.slice(5, 7), 16)
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5
+})
+const sectionStyle = computed(() => ({
+  backgroundColor: props.styles?.backgroundColor || undefined,
+  paddingTop: props.styles?.paddingTop || undefined,
+  paddingBottom: props.styles?.paddingBottom || undefined,
+}))
 const submitted = ref(false)
 const form = ref({ name: '', lastName: '', email: '', org: '', role: '', phone: '', message: '' })
 function submitForm() { submitted.value = true; setTimeout(() => submitted.value = false, 5000) }
