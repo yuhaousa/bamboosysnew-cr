@@ -68,6 +68,7 @@ export interface BlockButton {
 }
 
 export interface BlockStyles {
+  variant?: 'light' | 'dark' | 'glass' | 'gradient'
   backgroundColor?: string
   textColor?: string
   backgroundImage?: string
@@ -83,8 +84,11 @@ export interface BlockStyles {
 
 export interface HeroBannerContent {
   title: string
+  titleColor?: string
   subtitle?: string
+  subtitleColor?: string
   description?: string
+  descriptionColor?: string
   buttons: BlockButton[]
   image?: BlockImage
   backgroundImage?: BlockImage
@@ -135,6 +139,7 @@ export interface ServiceItem {
 export interface ServicesSectionContent {
   badge?: string
   title: string
+  subtitle?: string
   description?: string
   services: ServiceItem[]
 }
@@ -158,13 +163,23 @@ export interface CourseListingContent {
   columns: 2 | 3 | 4
 }
 
+export interface AboutHighlight {
+  id: string
+  icon?: string
+  title: string
+  description?: string
+}
+
 export interface AboutSectionContent {
   badge?: string
   title: string
+  subtitle?: string
   description: string
-  highlights: string[]
+  highlights: string[] | AboutHighlight[]
   image: BlockImage
-  stats: Array<{ label: string; value: string }>
+  stats: Array<{ id?: string; label: string; value: string }>
+  buttons: BlockButton[]
+}
   buttons: BlockButton[]
 }
 
@@ -290,6 +305,7 @@ export interface ContactSectionContent {
   address?: string
   showForm?: boolean
   formTitle?: string
+  formButtonText?: string
 }
 
 export interface MapSectionContent {
@@ -380,6 +396,16 @@ export interface ThemeConfig {
   accentColor: string
   fontHeading: string
   fontBody: string
+  headerStyle?: 'light' | 'dark'
+  headerBgColor?: string
+  navCtaText?: string
+  navCtaLink?: string
+  navShowLanguage?: boolean
+  navLanguageText?: string
+  logoShape?: 'circle' | 'none'
+  logoUrl?: string
+  faviconUrl?: string
+  footerText?: string
 }
 
 export interface SiteSettings {

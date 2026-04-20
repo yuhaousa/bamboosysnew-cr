@@ -32,6 +32,18 @@ app.use('*', corsMiddleware)
 app.route('/api/public', publicRouter)
 app.route('/api/auth', authRouter)
 
+// ─── Media file serve (no auth — needed for <img src> to work) ───────────────
+app.get('/api/media/file/*', async (c) => {
+  const key = c.req.path.replace('/api/media/file/', '')
+  if (!key) return c.json({ error: 'Not found' }, 404)
+  const obj = await c.env.BUCKET.get(key)
+  if (!obj) return c.json({ error: 'Not found' }, 404)
+  const headers = new Headers()
+  obj.writeHttpMetadata(headers)
+  headers.set('cache-control', 'public, max-age=31536000')
+  return new Response(obj.body, { headers })
+})
+
 // ─── Protected routes ────────────────────────────────────────────────────────
 app.use('/api/*', authMiddleware)
 

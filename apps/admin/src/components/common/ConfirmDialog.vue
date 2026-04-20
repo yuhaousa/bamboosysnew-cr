@@ -65,6 +65,7 @@ const icon = computed(() => props.variant === 'warning' ? AlertTriangle : Trash2
 
 function confirm() {
   emit('confirm')
+  emit('update:modelValue', false)
 }
 
 function cancel() {

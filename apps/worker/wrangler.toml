@@ -14,10 +14,13 @@ binding = "BUCKET"
 bucket_name = "bamboosys-media"
 preview_bucket_name = "bamboosys-media-preview"
 
+[dev]
+port = 8000
+
 [vars]
-MEDIA_BASE_URL = "https://pub-YOUR_ACCOUNT.r2.dev"
-ADMIN_ORIGIN = "http://localhost:5174"
-FRONTEND_ORIGIN = "http://localhost:5173"
+MEDIA_BASE_URL = "http://localhost:8000/api/media/file"
+ADMIN_ORIGIN = "http://localhost:8001"
+FRONTEND_ORIGIN = "http://localhost:8002"
 ADMIN_EMAIL = "admin@example.com"
 ADMIN_PASSWORD = "changeme123"
 JWT_SECRET = "CHANGE_THIS_TO_A_RANDOM_SECRET_AT_LEAST_32_CHARS"

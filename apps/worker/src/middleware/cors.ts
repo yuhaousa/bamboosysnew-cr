@@ -6,8 +6,8 @@ export const corsMiddleware = createMiddleware<{ Bindings: Env }>(async (c, next
   const allowedOrigins = [
     c.env.ADMIN_ORIGIN,
     c.env.FRONTEND_ORIGIN,
-    'http://localhost:5173',
-    'http://localhost:5174',
+    'http://localhost:8001',
+    'http://localhost:8002',
   ].filter(Boolean)
 
   const isAllowed = allowedOrigins.includes(origin)

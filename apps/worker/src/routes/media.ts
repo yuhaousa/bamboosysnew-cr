@@ -6,6 +6,17 @@ import { requireRole } from '../middleware/auth'
 
 const router = new Hono<{ Bindings: Env }>()
 
+// GET /api/media/file/:r2Key+ — serve R2 file directly (local dev fallback)
+router.get('/file/:key{.+}', async (c) => {
+  const key = c.req.param('key')
+  const obj = await c.env.BUCKET.get(key)
+  if (!obj) return c.json({ error: 'Not found' }, 404)
+  const headers = new Headers()
+  obj.writeHttpMetadata(headers)
+  headers.set('cache-control', 'public, max-age=31536000')
+  return new Response(obj.body, { headers })
+})
+
 // GET /api/media — list media
 router.get('/', async (c) => {
   const { page = '1', limit = '50', search } = c.req.query()

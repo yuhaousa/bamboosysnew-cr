@@ -11,6 +11,16 @@
       </button>
     </div>
 
+    <!-- Homepage indicator -->
+    <div v-if="homePage" class="flex items-center gap-2 px-4 py-2.5 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg text-sm text-blue-700 dark:text-blue-300">
+      <Home class="w-4 h-4 flex-shrink-0" />
+      <span>Homepage is <strong>{{ homePage.title }}</strong> → <code class="font-mono text-xs">localhost:8002/</code> loads this page.</span>
+    </div>
+    <div v-else class="flex items-center gap-2 px-4 py-2.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg text-sm text-amber-700 dark:text-amber-300">
+      <Home class="w-4 h-4 flex-shrink-0" />
+      <span>No homepage set. Click the <Home class="w-3.5 h-3.5 inline" /> icon on a page to make it the homepage (slug <code class="font-mono text-xs">home</code> = root <code class="font-mono text-xs">/</code>).</span>
+    </div>
+
     <!-- Filters -->
     <div class="flex flex-wrap items-center gap-3">
       <div class="relative flex-1 min-w-[200px]">
@@ -50,7 +60,12 @@
         <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
           <tr v-for="page in store.pages" :key="page.id" class="hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors">
             <td class="px-4 py-3">
-              <span class="font-medium text-gray-900 dark:text-white">{{ page.title }}</span>
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-gray-900 dark:text-white">{{ page.title }}</span>
+                <span v-if="page.slug === 'home'" class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs rounded-md font-medium">
+                  <Home class="w-3 h-3" /> Homepage
+                </span>
+              </div>
             </td>
             <td class="px-4 py-3 text-gray-500 hidden md:table-cell font-mono text-xs">/{{ page.slug }}</td>
             <td class="px-4 py-3">
@@ -72,6 +87,14 @@
                 </button>
                 <button v-else @click="doPublish(page.id)" class="btn btn-ghost py-1 px-2.5 text-xs text-green-500" title="Publish">
                   <Globe class="w-3.5 h-3.5" />
+                </button>
+                <button
+                  v-if="page.slug !== 'home'"
+                  @click="doSetHomepage(page)"
+                  class="btn btn-ghost py-1 px-2.5 text-xs text-blue-400"
+                  title="Set as Homepage"
+                >
+                  <Home class="w-3.5 h-3.5" />
                 </button>
                 <button @click="doDelete(page)" class="btn btn-ghost py-1 px-2.5 text-xs text-red-400" title="Delete">
                   <Trash2 class="w-3.5 h-3.5" />
@@ -112,14 +135,14 @@
       </template>
     </AppModal>
 
-    <ConfirmDialog v-model:open="showDeleteConfirm" title="Delete Page" :message="`Are you sure you want to delete '${deleteTarget?.title}'? This cannot be undone.`" variant="danger" confirm-text="Delete" @confirm="execDelete" />
+    <ConfirmDialog v-model="showDeleteConfirm" title="Delete Page" :message="`Are you sure you want to delete '${deleteTarget?.title}'? This cannot be undone.`" variant="danger" confirm-text="Delete" @confirm="execDelete" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-import { Plus, Search, Pencil, Copy, Globe, EyeOff, Trash2, FileText } from 'lucide-vue-next'
+import { Plus, Search, Pencil, Copy, Globe, EyeOff, Trash2, FileText, Home } from 'lucide-vue-next'
 import { usePagesStore } from '@/stores/pages'
 import { useToast } from '@/composables/useToast'
 import AppModal from '@/components/common/AppModal.vue'
@@ -132,6 +155,7 @@ const toast = useToast()
 
 const search = ref('')
 const statusFilter = ref('')
+const homePage = computed(() => store.pages.find(p => p.slug === 'home'))
 const showCreate = ref(false)
 const showDeleteConfirm = ref(false)
 const deleteTarget = ref<Page | null>(null)
@@ -163,6 +187,21 @@ async function doCreate() {
   }
 }
 
+async function doSetHomepage(page: Page) {
+  if (page.slug === 'home') return
+  try {
+    // If another page currently owns the 'home' slug, rename it first
+    const current = homePage.value
+    if (current) {
+      await store.updatePage(current.id, { slug: `home-${Date.now().toString(36)}` })
+    }
+    await store.updatePage(page.id, { slug: 'home' })
+    toast.success(`"${page.title}" is now the homepage`)
+  } catch (e: unknown) {
+    toast.error(e instanceof Error ? e.message : 'Failed to set homepage')
+  }
+}
+
 async function doPublish(id: string) {
   await store.publishPage(id); toast.success('Page published!')
 }
@@ -178,8 +217,13 @@ function doDelete(page: Page) {
 }
 async function execDelete() {
   if (!deleteTarget.value) return
-  await store.deletePage(deleteTarget.value.id)
-  toast.success('Page deleted')
+  try {
+    await store.deletePage(deleteTarget.value.id)
+    toast.success('Page deleted')
+    showDeleteConfirm.value = false
+  } catch (e: unknown) {
+    toast.error(e instanceof Error ? e.message : 'Failed to delete page')
+  }
 }
 
 function formatDate(d?: string) {

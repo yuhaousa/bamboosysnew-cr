@@ -72,6 +72,7 @@ const navGroups = [
     items: [
       { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
       { to: '/pages', label: 'Pages', icon: FileText },
+      { to: '/templates', label: 'Templates', icon: Globe },
       { to: '/media', label: 'Media', icon: Image },
     ],
   },
@@ -91,8 +92,11 @@ const navGroups = [
   },
 ]
 
+// Exact-match routes — only active when path is exactly this
+const exactRoutes = ['/dashboard', '/settings', '/pages', '/templates', '/media']
+
 function isActive(to: string) {
-  if (to === '/dashboard') return route.path === '/dashboard'
+  if (exactRoutes.includes(to)) return route.path === to
   return route.path.startsWith(to)
 }
 </script>

@@ -9,6 +9,40 @@
         >
           <component :is="btn.icon" class="w-4 h-4" />
         </button>
+
+        <!-- Divider -->
+        <div class="w-px bg-gray-300 dark:bg-gray-600 mx-0.5 self-stretch" />
+
+        <!-- Text color picker -->
+        <label class="relative p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer flex items-center" title="Text Color">
+          <Type class="w-4 h-4 text-gray-600 dark:text-gray-400" />
+          <span class="absolute bottom-1 left-1.5 right-1.5 h-1 rounded-sm" :style="{ backgroundColor: activeTextColor || '#000' }" />
+          <input type="color" class="sr-only" :value="activeTextColor || '#000000'"
+            @input="setTextColor(($event.target as HTMLInputElement).value)" />
+        </label>
+
+        <!-- Clear text color -->
+        <button @click="clearTextColor" title="Remove text color"
+          class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-400 transition-colors text-xs font-bold">
+          A
+        </button>
+
+        <!-- Divider -->
+        <div class="w-px bg-gray-300 dark:bg-gray-600 mx-0.5 self-stretch" />
+
+        <!-- Highlight color picker -->
+        <label class="relative p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer flex items-center" title="Highlight Color">
+          <Highlighter class="w-4 h-4 text-gray-600 dark:text-gray-400" />
+          <span class="absolute bottom-1 left-1.5 right-1.5 h-1 rounded-sm" :style="{ backgroundColor: activeHighlight || '#ffff00' }" />
+          <input type="color" class="sr-only" :value="activeHighlight || '#ffff00'"
+            @input="setHighlight(($event.target as HTMLInputElement).value)" />
+        </label>
+
+        <!-- Clear highlight -->
+        <button @click="clearHighlight" title="Remove highlight"
+          class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-400 transition-colors">
+          <X class="w-4 h-4" />
+        </button>
       </div>
       <!-- Editor content -->
       <EditorContent :editor="editor" class="tiptap-editor min-h-[200px]" />
@@ -17,15 +51,19 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onBeforeUnmount } from 'vue'
+import { computed, watch, onBeforeUnmount } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Link from '@tiptap/extension-link'
 import TextAlign from '@tiptap/extension-text-align'
+import TextStyle from '@tiptap/extension-text-style'
+import Color from '@tiptap/extension-color'
+import Highlight from '@tiptap/extension-highlight'
 import {
   Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, Heading2, Heading3,
-  Quote, Code, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight, Undo, Redo
+  Quote, Code, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight, Undo, Redo,
+  Type, Highlighter, X
 } from 'lucide-vue-next'
 import type { RichTextContent } from '@shared/types'
 
@@ -39,6 +77,9 @@ const editor = useEditor({
     Underline,
     Link.configure({ openOnClick: false }),
     TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    TextStyle,
+    Color,
+    Highlight.configure({ multicolor: true }),
   ],
   onUpdate: ({ editor }) => {
     emit('update', { html: editor.getHTML() })
@@ -52,6 +93,22 @@ watch(() => props.content.html, (html) => {
 })
 
 onBeforeUnmount(() => editor.value?.destroy())
+
+const activeTextColor = computed(() => editor.value?.getAttributes('textStyle')?.color ?? '')
+const activeHighlight = computed(() => editor.value?.getAttributes('highlight')?.color ?? '')
+
+function setTextColor(color: string) {
+  editor.value?.chain().focus().setColor(color).run()
+}
+function clearTextColor() {
+  editor.value?.chain().focus().unsetColor().run()
+}
+function setHighlight(color: string) {
+  editor.value?.chain().focus().setHighlight({ color }).run()
+}
+function clearHighlight() {
+  editor.value?.chain().focus().unsetHighlight().run()
+}
 
 const toolbarButtons = [
   { action: 'bold', title: 'Bold', icon: Bold, active: 'bold' },
@@ -78,6 +135,20 @@ function runAction(action: string) {
     italic: () => chain.toggleItalic().run(),
     underline: () => chain.toggleUnderline().run(),
     h2: () => chain.toggleHeading({ level: 2 }).run(),
+    h3: () => chain.toggleHeading({ level: 3 }).run(),
+    bulletList: () => chain.toggleBulletList().run(),
+    orderedList: () => chain.toggleOrderedList().run(),
+    blockquote: () => chain.toggleBlockquote().run(),
+    code: () => chain.toggleCode().run(),
+    alignLeft: () => chain.setTextAlign('left').run(),
+    alignCenter: () => chain.setTextAlign('center').run(),
+    alignRight: () => chain.setTextAlign('right').run(),
+    undo: () => chain.undo().run(),
+    redo: () => chain.redo().run(),
+  }
+  actions[action]?.()
+}
+</script>
     h3: () => chain.toggleHeading({ level: 3 }).run(),
     bulletList: () => chain.toggleBulletList().run(),
     orderedList: () => chain.toggleOrderedList().run(),
