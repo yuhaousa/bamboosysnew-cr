@@ -102,20 +102,11 @@
   </section>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import { useBlockVariant } from '@/composables/useBlockVariant'
 import type { ContactSectionContent, BlockStyles } from '@shared/types'
 const props = defineProps<{ content: ContactSectionContent; styles?: BlockStyles }>()
-const isDark = computed(() => {
-  const bg = props.styles?.backgroundColor
-  if (!bg || !bg.startsWith('#') || bg.length < 7) return false
-  const r = parseInt(bg.slice(1, 3), 16); const g = parseInt(bg.slice(3, 5), 16); const b = parseInt(bg.slice(5, 7), 16)
-  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5
-})
-const sectionStyle = computed(() => ({
-  backgroundColor: props.styles?.backgroundColor || undefined,
-  paddingTop: props.styles?.paddingTop || undefined,
-  paddingBottom: props.styles?.paddingBottom || undefined,
-}))
+const { isDark, sectionStyle } = useBlockVariant(() => props.styles)
 const submitted = ref(false)
 const form = ref({ name: '', lastName: '', email: '', org: '', role: '', phone: '', message: '' })
 function submitForm() { submitted.value = true; setTimeout(() => submitted.value = false, 5000) }

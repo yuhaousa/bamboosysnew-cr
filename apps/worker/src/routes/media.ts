@@ -19,23 +19,32 @@ router.get('/file/:key{.+}', async (c) => {
 
 // GET /api/media — list media
 router.get('/', async (c) => {
-  const { page = '1', limit = '50', search } = c.req.query()
+  const { page = '1', limit = '50', search, folder } = c.req.query()
   const offset = (parseInt(page) - 1) * parseInt(limit)
 
-  let query = 'SELECT * FROM media WHERE 1=1'
+  let where = 'WHERE 1=1'
   const params: unknown[] = []
 
+  if (folder) {
+    where += ' AND folder = ?'
+    params.push(folder)
+  }
   if (search) {
-    query += ' AND (filename LIKE ? OR alt LIKE ?)'
+    where += ' AND (filename LIKE ? OR alt LIKE ?)'
     params.push(`%${search}%`, `%${search}%`)
   }
 
-  query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?'
+  const query = `SELECT * FROM media ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`
   params.push(parseInt(limit), offset)
+
+  const countParams: unknown[] = []
+  let countWhere = 'WHERE 1=1'
+  if (folder) { countWhere += ' AND folder = ?'; countParams.push(folder) }
+  if (search) { countWhere += ' AND (filename LIKE ? OR alt LIKE ?)'; countParams.push(`%${search}%`, `%${search}%`) }
 
   const [rows, countRow] = await Promise.all([
     c.env.DB.prepare(query).bind(...params).all(),
-    c.env.DB.prepare(`SELECT COUNT(*) as total FROM media${search ? ' WHERE filename LIKE ? OR alt LIKE ?' : ''}`).bind(...(search ? [`%${search}%`, `%${search}%`] : [])).first<{ total: number }>(),
+    c.env.DB.prepare(`SELECT COUNT(*) as total FROM media ${countWhere}`).bind(...countParams).first<{ total: number }>(),
   ])
 
   return c.json({ data: rows.results || [], total: countRow?.total ?? 0 })
@@ -46,6 +55,7 @@ router.post('/upload', async (c) => {
   const formData = await c.req.formData()
   const file = formData.get('file') as File | null
   const alt = formData.get('alt') as string | null
+  const folder = (formData.get('folder') as string | null) ?? 'general'
 
   if (!file) return c.json({ error: 'No file provided' }, 400)
 
@@ -74,9 +84,9 @@ router.post('/upload', async (c) => {
   const ts = now()
 
   await c.env.DB.prepare(
-    `INSERT INTO media (id, filename, r2_key, url, size, mime_type, alt, uploaded_by, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).bind(id, file.name, r2Key, url, file.size, file.type, alt ?? '', userId, ts).run()
+    `INSERT INTO media (id, filename, r2_key, url, size, mime_type, alt, folder, uploaded_by, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(id, file.name, r2Key, url, file.size, file.type, alt ?? '', folder, userId, ts).run()
 
   await logAudit(c.env.DB, userId, userName, 'media.upload', 'media', id, { filename: file.name })
 

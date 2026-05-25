@@ -5,7 +5,7 @@
         <div v-if="content.image?.url" :class="reverse ? 'lg:order-2' : 'lg:order-1'">
           <img :src="content.image.url" :alt="content.image.alt" class="w-full rounded-2xl shadow-xl" />
         </div>
-        <div :class="reverse ? 'lg:order-1' : 'lg:order-2'" class="space-y-6">
+        <div :class="[reverse ? 'lg:order-1' : 'lg:order-2', !content.image?.url ? 'lg:col-span-2' : '']" class="space-y-6">
           <span v-if="content.badge"
             class="inline-block px-3 py-1 text-xs font-semibold rounded-full tracking-wider uppercase"
             :style="{ color: 'var(--color-primary)', border: '1px solid var(--color-primary)', backgroundColor: 'color-mix(in srgb, var(--color-primary) 12%, transparent)' }"
@@ -32,18 +32,8 @@
   </section>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue'
+import { useBlockVariant } from '@/composables/useBlockVariant'
 import type { ImageTextContent, BlockStyles } from '@shared/types'
 const props = defineProps<{ content: ImageTextContent; styles?: BlockStyles; reverse?: boolean }>()
-const isDark = computed(() => {
-  const bg = props.styles?.backgroundColor
-  if (!bg || !bg.startsWith('#') || bg.length < 7) return false
-  const r = parseInt(bg.slice(1, 3), 16); const g = parseInt(bg.slice(3, 5), 16); const b = parseInt(bg.slice(5, 7), 16)
-  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5
-})
-const sectionStyle = computed(() => ({
-  backgroundColor: props.styles?.backgroundColor || undefined,
-  paddingTop: props.styles?.paddingTop || undefined,
-  paddingBottom: props.styles?.paddingBottom || undefined,
-}))
+const { isDark, sectionStyle } = useBlockVariant(() => props.styles)
 </script>

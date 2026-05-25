@@ -49,12 +49,20 @@ export function useBlockVariant(stylesGetter: () => BlockStyles | undefined) {
         base.backgroundColor = s?.backgroundColor || '#ffffff'
         break
       case 'glass':
-        base.backgroundColor = s?.backgroundColor || '#070e1c'
+        // Dark navy base + radial blue/indigo glows for depth
+        base.backgroundColor = s?.backgroundColor || '#060d1e'
+        base.backgroundImage =
+          'radial-gradient(ellipse 70% 60% at 15% 35%, rgba(37,99,235,0.22) 0%, transparent 70%), ' +
+          'radial-gradient(ellipse 55% 45% at 85% 65%, rgba(99,102,241,0.18) 0%, transparent 70%), ' +
+          'radial-gradient(ellipse 40% 30% at 50% 10%, rgba(14,165,233,0.1) 0%, transparent 60%)'
         break
-      case 'gradient':
-        base.background =
-          'linear-gradient(135deg, color-mix(in srgb, var(--color-primary, #2563eb) 10%, #f8faff) 0%, #f8faff 65%)'
+      case 'gradient': {
+        const from = s?.gradientFrom || '#dbeafe'
+        const to = s?.gradientTo || '#f0fdf4'
+        const angle = s?.gradientAngle ?? 135
+        base.backgroundImage = `linear-gradient(${angle}deg, ${from} 0%, ${to} 100%)`
         break
+      }
       default:
         if (s?.backgroundColor) base.backgroundColor = s.backgroundColor
     }

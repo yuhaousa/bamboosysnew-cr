@@ -15,10 +15,11 @@
   </section>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import { useBlockVariant } from '@/composables/useBlockVariant'
 import type { NewsletterSectionContent, BlockStyles } from '@shared/types'
 const props = defineProps<{ content: NewsletterSectionContent; styles?: BlockStyles }>()
-const sectionStyle = computed(() => ({ backgroundColor: props.styles?.backgroundColor ?? undefined }))
+const { sectionStyle, isDark } = useBlockVariant(() => props.styles)
 const email = ref('')
 const submitted = ref(false)
 function submit() { submitted.value = true; setTimeout(() => { submitted.value = false; email.value = '' }, 5000) }

@@ -9,7 +9,7 @@
         </div>
 
         <!-- Content -->
-        <div class="space-y-6">
+        <div class="space-y-6" :class="{ 'lg:col-span-2': !content.image?.url }">
           <span v-if="content.badge"
             class="inline-block px-3 py-1 text-xs font-semibold rounded-full tracking-wider uppercase"
             :style="{ color: 'var(--color-primary)', border: '1px solid var(--color-primary)', backgroundColor: 'color-mix(in srgb, var(--color-primary) 12%, transparent)' }"
@@ -59,7 +59,8 @@
           <!-- Stats -->
           <div v-if="content.stats?.length"
             class="grid gap-4 pt-4 border-t"
-            :class="[isDark ? 'border-white/10' : 'border-gray-200 dark:border-gray-700', `grid-cols-${content.stats.length}`]"
+            :class="isDark ? 'border-white/10' : 'border-gray-200 dark:border-gray-700'"
+            :style="{ gridTemplateColumns: `repeat(${content.stats.length}, 1fr)` }"
           >
             <div v-for="stat in content.stats" :key="stat.label" class="text-center">
               <p class="text-2xl font-bold" :style="{ color: 'var(--color-primary)' }">{{ stat.value }}</p>
@@ -83,17 +84,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useBlockVariant } from '@/composables/useBlockVariant'
 import type { AboutSectionContent, AboutHighlight, BlockStyles } from '@shared/types'
 const props = defineProps<{ content: AboutSectionContent; styles?: BlockStyles }>()
 
-const isDark = computed(() => {
-  const bg = props.styles?.backgroundColor
-  if (!bg || !bg.startsWith('#') || bg.length < 7) return false
-  const r = parseInt(bg.slice(1, 3), 16)
-  const g = parseInt(bg.slice(3, 5), 16)
-  const b = parseInt(bg.slice(5, 7), 16)
-  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5
-})
+const { isDark, sectionStyle } = useBlockVariant(() => props.styles)
 
 const richHighlights = computed(() =>
   (props.content.highlights ?? []).filter((h): h is AboutHighlight => typeof h === 'object' && h !== null)
@@ -102,10 +97,5 @@ const simpleHighlights = computed(() =>
   (props.content.highlights ?? []).filter((h): h is string => typeof h === 'string')
 )
 
-const sectionStyle = computed(() => ({
-  backgroundColor: props.styles?.backgroundColor || undefined,
-  paddingTop: props.styles?.paddingTop || undefined,
-  paddingBottom: props.styles?.paddingBottom || undefined,
-}))
 </script>
 

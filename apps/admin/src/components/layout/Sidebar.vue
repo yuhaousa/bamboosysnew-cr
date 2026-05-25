@@ -76,7 +76,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   LayoutDashboard, FileText, Image, Settings, Users, ChevronLeft, ChevronRight,
-  Menu, ClipboardList, Globe
+  Menu, ClipboardList, Globe, BookOpen, MessageSquare, Users2, Briefcase, HelpCircle, LayoutGrid
 } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
@@ -106,6 +106,17 @@ const navGroups = [
     items: [
       { to: '/settings', label: 'Site Settings', icon: Settings },
       { to: '/settings/menus', label: 'Menu Builder', icon: Menu },
+    ],
+  },
+  {
+    label: 'Content Library',
+    items: [
+      { to: '/content/courses', label: 'Courses', icon: BookOpen },
+      { to: '/content/testimonials', label: 'Testimonials', icon: MessageSquare },
+      { to: '/content/team', label: 'Team', icon: Users2 },
+      { to: '/content/services', label: 'Services', icon: Briefcase },
+      { to: '/content/faqs', label: 'FAQs', icon: HelpCircle },
+      { to: '/content/portfolio', label: 'Portfolio', icon: LayoutGrid },
     ],
   },
   {

@@ -11,6 +11,12 @@ import revisionsRouter from './routes/revisions'
 import usersRouter from './routes/users'
 import auditRouter from './routes/audit'
 import publicRouter from './routes/public'
+import coursesRouter from './routes/courses'
+import testimonialsRouter from './routes/testimonials'
+import teamRouter from './routes/team'
+import servicesEntityRouter from './routes/services-entity'
+import faqsRouter from './routes/faqs'
+import portfolioRouter from './routes/portfolio'
 
 export interface Env {
   DB: D1Database
@@ -55,6 +61,12 @@ app.route('/api/menus', menusRouter)
 app.route('/api/revisions', revisionsRouter)
 app.route('/api/users', usersRouter)
 app.route('/api/audit', auditRouter)
+app.route('/api/courses', coursesRouter)
+app.route('/api/testimonials', testimonialsRouter)
+app.route('/api/team', teamRouter)
+app.route('/api/services-entity', servicesEntityRouter)
+app.route('/api/faqs', faqsRouter)
+app.route('/api/portfolio', portfolioRouter)
 
 // ─── 404 ──────────────────────────────────────────────────────────────────────
 app.notFound((c) => c.json({ error: 'Not found' }, 404))

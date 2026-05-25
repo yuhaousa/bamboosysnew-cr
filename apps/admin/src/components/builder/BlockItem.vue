@@ -15,9 +15,18 @@
     </div>
 
     <!-- Block type icon + label -->
-    <div class="flex-1 min-w-0">
-      <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{{ blockLabel }}</p>
-      <p class="text-xs text-gray-400 capitalize">{{ block.type.replace(/_/g, ' ') }}</p>
+    <div class="flex-1 min-w-0 flex items-center gap-2">
+      <!-- Color swatch dot -->
+      <div
+        v-if="blockColor"
+        class="w-2.5 h-2.5 rounded-full border border-white/30 dark:border-gray-600 shrink-0 shadow-sm"
+        :style="{ background: blockColor }"
+        :title="'Background: ' + blockColor"
+      />
+      <div class="min-w-0">
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{{ blockLabel }}</p>
+        <p class="text-xs text-gray-400 capitalize">{{ block.type.replace(/_/g, ' ') }}</p>
+      </div>
     </div>
 
     <!-- Actions (show on hover or selected) -->
@@ -73,8 +82,11 @@ defineEmits<{
 const blockLabel = computed(() => {
   const meta = BLOCK_TYPES.find(b => b.type === props.block.type)
   if (meta) return meta.label
-  // Try to get title from content
   const content = props.block.content as Record<string, unknown>
-  return (content.title as string) || meta?.label || props.block.type
+  return (content.title as string) || props.block.type
+})
+
+const blockColor = computed(() => {
+  return (props.block.styles as Record<string, unknown>)?.backgroundColor as string | undefined
 })
 </script>

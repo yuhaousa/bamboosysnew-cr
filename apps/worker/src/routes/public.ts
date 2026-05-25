@@ -1,6 +1,12 @@
 import { Hono } from 'hono'
 import type { Env } from '../index'
 import { parseJSON } from '../lib/utils'
+import { mapCourse } from './courses'
+import { mapTestimonial } from './testimonials'
+import { mapMember } from './team'
+import { mapService } from './services-entity'
+import { mapFAQ } from './faqs'
+import { mapPortfolioItem } from './portfolio'
 
 const router = new Hono<{ Bindings: Env }>()
 
@@ -113,6 +119,113 @@ router.get('/menus', async (c) => {
       return { id: row.id, name: row.name, slug: row.slug, items: parseJSON(row.items as string, []) }
     })
   })
+})
+
+// ─── Entity public endpoints ──────────────────────────────────────────────────
+
+// GET /api/public/courses?ids=id1,id2
+router.get('/courses', async (c) => {
+  const ids = c.req.query('ids')
+  let q = 'SELECT * FROM courses WHERE is_active = 1'
+  const params: unknown[] = []
+  if (ids) {
+    const list = ids.split(',').filter(Boolean)
+    if (list.length) {
+      q += ` AND id IN (${list.map(() => '?').join(',')})`
+      params.push(...list)
+    }
+  }
+  q += ' ORDER BY sort_order ASC, created_at DESC'
+  const rows = await c.env.DB.prepare(q).bind(...params).all()
+  return c.json({ data: (rows.results || []).map(r => mapCourse(r as Record<string, unknown>)) })
+})
+
+// GET /api/public/courses/:slug
+router.get('/courses/:slug', async (c) => {
+  const row = await c.env.DB.prepare('SELECT * FROM courses WHERE slug = ? AND is_active = 1').bind(c.req.param('slug')).first()
+  if (!row) return c.json({ error: 'Not found' }, 404)
+  return c.json({ data: mapCourse(row as Record<string, unknown>) })
+})
+
+// GET /api/public/testimonials?ids=id1,id2
+router.get('/testimonials', async (c) => {
+  const ids = c.req.query('ids')
+  let q = 'SELECT * FROM testimonials WHERE is_active = 1'
+  const params: unknown[] = []
+  if (ids) {
+    const list = ids.split(',').filter(Boolean)
+    if (list.length) { q += ` AND id IN (${list.map(() => '?').join(',')})`; params.push(...list) }
+  }
+  q += ' ORDER BY sort_order ASC'
+  const rows = await c.env.DB.prepare(q).bind(...params).all()
+  return c.json({ data: (rows.results || []).map(r => mapTestimonial(r as Record<string, unknown>)) })
+})
+
+// GET /api/public/team?ids=id1,id2
+router.get('/team', async (c) => {
+  const ids = c.req.query('ids')
+  let q = 'SELECT * FROM team_members WHERE is_active = 1'
+  const params: unknown[] = []
+  if (ids) {
+    const list = ids.split(',').filter(Boolean)
+    if (list.length) { q += ` AND id IN (${list.map(() => '?').join(',')})`; params.push(...list) }
+  }
+  q += ' ORDER BY sort_order ASC'
+  const rows = await c.env.DB.prepare(q).bind(...params).all()
+  return c.json({ data: (rows.results || []).map(r => mapMember(r as Record<string, unknown>)) })
+})
+
+// GET /api/public/services?ids=id1,id2
+router.get('/services', async (c) => {
+  const ids = c.req.query('ids')
+  let q = 'SELECT * FROM services WHERE is_active = 1'
+  const params: unknown[] = []
+  if (ids) {
+    const list = ids.split(',').filter(Boolean)
+    if (list.length) { q += ` AND id IN (${list.map(() => '?').join(',')})`; params.push(...list) }
+  }
+  q += ' ORDER BY sort_order ASC'
+  const rows = await c.env.DB.prepare(q).bind(...params).all()
+  return c.json({ data: (rows.results || []).map(r => mapService(r as Record<string, unknown>)) })
+})
+
+// GET /api/public/faqs?ids=id1,id2&category=
+router.get('/faqs', async (c) => {
+  const { ids, category } = c.req.query()
+  let q = 'SELECT * FROM faqs WHERE is_active = 1'
+  const params: unknown[] = []
+  if (ids) {
+    const list = ids.split(',').filter(Boolean)
+    if (list.length) { q += ` AND id IN (${list.map(() => '?').join(',')})`; params.push(...list) }
+  }
+  if (category) { q += ' AND category = ?'; params.push(category) }
+  q += ' ORDER BY sort_order ASC'
+  const rows = await c.env.DB.prepare(q).bind(...params).all()
+  return c.json({ data: (rows.results || []).map(r => mapFAQ(r as Record<string, unknown>)) })
+})
+
+// GET /api/public/portfolio/:slug
+router.get('/portfolio/:slug', async (c) => {
+  const row = await c.env.DB.prepare(
+    'SELECT * FROM portfolio_items WHERE slug = ? AND is_active = 1'
+  ).bind(c.req.param('slug')).first()
+  if (!row) return c.json({ error: 'Not found' }, 404)
+  return c.json({ data: mapPortfolioItem(row as Record<string, unknown>) })
+})
+
+// GET /api/public/portfolio?ids=...&category=...
+router.get('/portfolio', async (c) => {
+  const { ids, category } = c.req.query()
+  let q = 'SELECT * FROM portfolio_items WHERE is_active = 1'
+  const params: unknown[] = []
+  if (ids) {
+    const list = ids.split(',').filter(Boolean)
+    if (list.length) { q += ` AND id IN (${list.map(() => '?').join(',')})`; params.push(...list) }
+  }
+  if (category) { q += ' AND category = ?'; params.push(category) }
+  q += ' ORDER BY sort_order ASC, created_at DESC'
+  const rows = await c.env.DB.prepare(q).bind(...params).all()
+  return c.json({ data: (rows.results || []).map(r => mapPortfolioItem(r as Record<string, unknown>)) })
 })
 
 export default router

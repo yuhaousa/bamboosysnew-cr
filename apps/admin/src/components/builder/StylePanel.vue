@@ -20,8 +20,56 @@
       <p class="text-xs text-gray-400 dark:text-gray-500 mt-1.5">{{ variantHint }}</p>
     </div>
 
-    <!-- Background Color with swatch picker -->
-    <div>
+    <!-- Gradient color pickers (only when gradient variant) -->
+    <div v-if="local.variant === 'gradient'" class="space-y-3 p-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+      <label class="form-label mb-0">Gradient Colors</label>
+      <div class="flex gap-3 items-center">
+        <!-- From -->
+        <div class="flex-1">
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">From</p>
+          <div class="flex gap-2 items-center">
+            <label class="relative w-8 h-8 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer overflow-hidden flex-shrink-0 hover:scale-105 transition-all shadow-sm"
+              :style="{ backgroundColor: local.gradientFrom || '#dbeafe' }">
+              <input type="color" :value="local.gradientFrom || '#dbeafe'"
+                @input="e => { local.gradientFrom = (e.target as HTMLInputElement).value; emit() }"
+                class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
+            </label>
+            <input type="text" :value="local.gradientFrom || '#dbeafe'"
+              @input="e => { local.gradientFrom = (e.target as HTMLInputElement).value; emit() }"
+              class="form-input flex-1 font-mono text-xs" placeholder="#dbeafe" />
+          </div>
+        </div>
+        <!-- Arrow -->
+        <div class="text-gray-400 text-sm mt-4">→</div>
+        <!-- To -->
+        <div class="flex-1">
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">To</p>
+          <div class="flex gap-2 items-center">
+            <label class="relative w-8 h-8 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer overflow-hidden flex-shrink-0 hover:scale-105 transition-all shadow-sm"
+              :style="{ backgroundColor: local.gradientTo || '#f0fdf4' }">
+              <input type="color" :value="local.gradientTo || '#f0fdf4'"
+                @input="e => { local.gradientTo = (e.target as HTMLInputElement).value; emit() }"
+                class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
+            </label>
+            <input type="text" :value="local.gradientTo || '#f0fdf4'"
+              @input="e => { local.gradientTo = (e.target as HTMLInputElement).value; emit() }"
+              class="form-input flex-1 font-mono text-xs" placeholder="#f0fdf4" />
+          </div>
+        </div>
+      </div>
+      <!-- Angle -->
+      <div class="flex items-center gap-3">
+        <label class="text-xs text-gray-500 dark:text-gray-400 w-16 flex-shrink-0">Angle</label>
+        <input type="range" min="0" max="360" :value="local.gradientAngle ?? 135"
+          @input="e => { local.gradientAngle = Number((e.target as HTMLInputElement).value); emit() }"
+          class="flex-1 h-1.5 accent-brand-500" />
+        <span class="text-xs font-mono text-gray-500 w-10 text-right">{{ local.gradientAngle ?? 135 }}°</span>
+      </div>
+      <!-- Live preview -->
+      <div class="h-8 rounded-lg border border-gray-200 dark:border-gray-700"
+        :style="{ backgroundImage: `linear-gradient(${local.gradientAngle ?? 135}deg, ${local.gradientFrom || '#dbeafe'} 0%, ${local.gradientTo || '#f0fdf4'} 100%)` }" />
+    </div>
+    <div v-if="local.variant !== 'gradient'">
       <label class="form-label">Background Color</label>
       <!-- Quick swatches -->
       <div class="flex flex-wrap gap-2 mb-2">
@@ -130,10 +178,24 @@
     <div class="grid grid-cols-2 gap-3">
       <div>
         <label class="form-label">Padding Top</label>
+        <div class="flex gap-1 mb-1.5 flex-wrap">
+          <button v-for="p in paddingPresets" :key="p.label"
+            @click="local.paddingTop = p.value; emit()"
+            class="px-2 py-0.5 rounded text-xs font-medium border transition-colors"
+            :class="local.paddingTop === p.value ? 'bg-brand-500 border-brand-500 text-white' : 'border-gray-300 dark:border-gray-600 text-gray-500 hover:border-brand-400'"
+          >{{ p.label }}</button>
+        </div>
         <input type="text" v-model="local.paddingTop" @input="emit" class="form-input" placeholder="80px" />
       </div>
       <div>
         <label class="form-label">Padding Bottom</label>
+        <div class="flex gap-1 mb-1.5 flex-wrap">
+          <button v-for="p in paddingPresets" :key="p.label"
+            @click="local.paddingBottom = p.value; emit()"
+            class="px-2 py-0.5 rounded text-xs font-medium border transition-colors"
+            :class="local.paddingBottom === p.value ? 'bg-brand-500 border-brand-500 text-white' : 'border-gray-300 dark:border-gray-600 text-gray-500 hover:border-brand-400'"
+          >{{ p.label }}</button>
+        </div>
         <input type="text" v-model="local.paddingBottom" @input="emit" class="form-input" placeholder="80px" />
       </div>
       <div>
@@ -176,6 +238,14 @@ const bgSwatches = computed(() => [
   { label: 'Dark Glass', value: '#070e1c', style: { background: 'linear-gradient(135deg,#070e1c,#0f1f3d)' } },
   { label: 'Primary', value: primary.value, style: { background: primary.value } },
 ])
+
+// ─── Padding presets ─────────────────────────────────────────────────────────
+const paddingPresets = [
+  { label: 'None', value: '0px' },
+  { label: 'S', value: '40px' },
+  { label: 'M', value: '80px' },
+  { label: 'L', value: '120px' },
+]
 
 // ─── Text color swatches ─────────────────────────────────────────────────────
 const textSwatches = computed(() => [
@@ -222,8 +292,8 @@ const variantHint = computed(() => {
   switch (local.variant) {
     case 'light': return 'White background with dark text.'
     case 'dark': return 'Dark background with white text and primary accents.'
-    case 'glass': return 'Deep navy with frosted-glass inner cards.'
-    case 'gradient': return 'Soft primary-color gradient background.'
+    case 'glass': return 'Deep navy with glowing depth and frosted-glass inner cards.'
+    case 'gradient': return 'Pick two colors and an angle below.'
     default: return 'Auto-detect from background color below.'
   }
 })

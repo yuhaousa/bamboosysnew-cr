@@ -28,21 +28,42 @@
     <VueDraggable
       v-else
       v-model="localBlocks"
-      class="flex-1 overflow-y-auto p-3 space-y-2"
+      class="flex-1 overflow-y-auto p-3"
       :animation="150"
       handle=".drag-handle"
       @end="onReorder"
     >
-      <BlockItem
-        v-for="block in localBlocks"
-        :key="block.id"
-        :block="block"
-        :selected="selectedBlockId === block.id"
-        @click="$emit('select', block.id)"
-        @duplicate="$emit('duplicate', block.id)"
-        @delete="$emit('delete', block.id)"
-        @toggle-visibility="$emit('toggle-visibility', block.id)"
-      />
+      <template v-for="(block, idx) in localBlocks" :key="block.id">
+        <!-- Insert-before button (only before first block) -->
+        <div v-if="idx === 0" class="relative h-5 flex items-center justify-center mb-0.5">
+          <button
+            @click="$emit('add-block-after', null)"
+            class="opacity-0 hover:opacity-100 flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-700 hover:bg-brand-100 transition-all"
+          >
+            <Plus class="w-3 h-3" /> Insert
+          </button>
+        </div>
+
+        <BlockItem
+          :block="block"
+          :selected="selectedBlockId === block.id"
+          @click="$emit('select', block.id)"
+          @duplicate="$emit('duplicate', block.id)"
+          @delete="$emit('delete', block.id)"
+          @toggle-visibility="$emit('toggle-visibility', block.id)"
+        />
+
+        <!-- Insert-after button between/after blocks -->
+        <div class="relative h-5 flex items-center justify-center mt-0.5 mb-0.5 group">
+          <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-transparent group-hover:bg-brand-200 dark:group-hover:bg-brand-800 transition-colors" />
+          <button
+            @click="$emit('add-block-after', block.id)"
+            class="relative opacity-0 group-hover:opacity-100 flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-700 hover:bg-brand-100 transition-all"
+          >
+            <Plus class="w-3 h-3" /> Add here
+          </button>
+        </div>
+      </template>
     </VueDraggable>
   </div>
 </template>
@@ -62,6 +83,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'add-block': []
+  'add-block-after': [string | null]
   'select': [string]
   'duplicate': [string]
   'delete': [string]

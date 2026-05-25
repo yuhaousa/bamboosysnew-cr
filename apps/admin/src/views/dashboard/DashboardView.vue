@@ -199,4 +199,3 @@ async function applyQuickPreset(preset: QuickPreset) {
   }
 }
 </script>
-</script>

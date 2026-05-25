@@ -8,8 +8,8 @@
   </section>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue'
+import { useBlockVariant } from '@/composables/useBlockVariant'
 import type { CustomHTMLContent, BlockStyles } from '@shared/types'
 const props = defineProps<{ content: CustomHTMLContent; styles?: BlockStyles }>()
-const sectionStyle = computed(() => ({ backgroundColor: props.styles?.backgroundColor ?? undefined }))
+const { sectionStyle, isDark } = useBlockVariant(() => props.styles)
 </script>

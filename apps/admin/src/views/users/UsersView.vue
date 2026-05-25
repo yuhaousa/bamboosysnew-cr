@@ -58,15 +58,17 @@ const users = ref<any[]>([])
 
 onMounted(async () => {
   try {
-    const data = await api.get<{ users: any[] }>('/users')
-    users.value = data.users ?? []
+    const data = await api.get<{ data: any[] }>('/users')
+    users.value = data.data ?? []
   } finally { isLoading.value = false }
 })
 
 async function changeRole(id: string, role: string) {
   try {
-    await api.put(`/users/${id}/role`, { role })
+    await api.patch(`/users/${id}/role`, { role })
     toast.success('Role updated')
+    const u = users.value.find(u => u.id === id)
+    if (u) u.role = role
   } catch { toast.error('Failed to update role') }
 }
 

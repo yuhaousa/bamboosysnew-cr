@@ -30,8 +30,8 @@ import ImageField from './_ImageField.vue'
 import type { GallerySectionContent } from '@shared/types'
 const props = defineProps<{ content: GallerySectionContent }>()
 const emit_ = defineEmits<{ update: [GallerySectionContent] }>()
-const local = reactive<GallerySectionContent>({ ...props.content, items: props.content.items.map(i => ({ ...i, image: { ...i.image } })) })
-watch(() => props.content, c => { Object.assign(local, { ...c, items: c.items.map(i => ({ ...i, image: { ...i.image } })) }) }, { deep: true })
+const local = reactive<GallerySectionContent>({ ...props.content, items: (props.content.items ?? []).map(i => ({ ...i, image: { ...i.image } })) })
+watch(() => props.content, c => { Object.assign(local, { ...c, items: (c.items ?? []).map(i => ({ ...i, image: { ...i.image } })) }) }, { deep: true })
 function add() { local.items.push({ id: uuid(), image: { url: '', alt: '' } }); emit() }
 function remove(i: number) { local.items.splice(i, 1); emit() }
 function emit() { emit_('update', { ...local, items: local.items.map(i => ({ ...i })) }) }

@@ -46,9 +46,20 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { Monitor, Tablet, Smartphone, RotateCcw, ExternalLink } from 'lucide-vue-next'
-import type { Block } from '@shared/types'
+import type { Block, BlockStyles } from '@shared/types'
 
-const props = defineProps<{ previewUrl?: string; blocks?: Block[] }>()
+const props = defineProps<{
+  previewUrl?: string
+  blocks?: Block[]
+  selectedBlockId?: string | null
+}>()
+
+const emit = defineEmits<{
+  'block-click': [blockId: string]
+  'content-change': [blockId: string, field: string, value: string]
+  'style-change': [blockId: string, styles: Partial<BlockStyles>]
+  'block-action': [blockId: string, action: string]
+}>()
 
 const iframeRef = ref<HTMLIFrameElement | null>(null)
 const currentWidth = ref('100%')
@@ -57,24 +68,45 @@ const refreshKey = ref(0)
 function setWidth(w: string) { currentWidth.value = w }
 function refresh() { refreshKey.value++ }
 
+function sendToIframe(msg: unknown) {
+  iframeRef.value?.contentWindow?.postMessage(msg, '*')
+}
+
 function sendBlocks() {
   if (!props.blocks || !iframeRef.value?.contentWindow) return
-  // Strip Vue reactive Proxy wrappers — postMessage requires plain cloneable objects
   const plain = JSON.parse(JSON.stringify(props.blocks))
-  iframeRef.value.contentWindow.postMessage({ type: 'PREVIEW_BLOCKS', blocks: plain }, '*')
+  sendToIframe({ type: 'PREVIEW_BLOCKS', blocks: plain })
 }
 
-// When iframe signals it's ready, send the current blocks
+// When iframe signals it's ready, send blocks + enable edit mode
 function onParentMessage(e: MessageEvent) {
-  if (e.data?.type === 'PREVIEW_READY') sendBlocks()
+  const { type, ...data } = e.data ?? {}
+  if (type === 'PREVIEW_READY') {
+    sendBlocks()
+    sendToIframe({ type: 'PREVIEW_EDIT_MODE', enabled: true })
+  } else if (type === 'PREVIEW_BLOCK_CLICK') {
+    emit('block-click', data.blockId)
+  } else if (type === 'PREVIEW_CONTENT_CHANGE') {
+    emit('content-change', data.blockId, data.field, data.value)
+  } else if (type === 'PREVIEW_STYLE_CHANGE') {
+    emit('style-change', data.blockId, data.styles)
+  } else if (type === 'PREVIEW_BLOCK_ACTION') {
+    emit('block-action', data.blockId, data.action)
+  }
 }
 
-// iframe load: don't send yet — the Vue app inside isn't mounted yet.
-// The PREVIEW_READY handshake handles the initial send.
-function onIframeLoad() {}
+function onIframeLoad() {
+  // Send edit mode right away in case PREVIEW_READY was missed on hot-reload
+  setTimeout(() => sendToIframe({ type: 'PREVIEW_EDIT_MODE', enabled: true }), 300)
+}
 
-// Whenever blocks change (typing, add/delete), push to iframe immediately
+// Push block changes to iframe whenever blocks change
 watch(() => props.blocks, sendBlocks, { deep: true })
+
+// When admin selects a block, highlight it in the preview too
+watch(() => props.selectedBlockId, (id) => {
+  sendToIframe({ type: 'PREVIEW_SELECT_BLOCK', blockId: id ?? null })
+})
 
 onMounted(() => window.addEventListener('message', onParentMessage))
 onUnmounted(() => window.removeEventListener('message', onParentMessage))

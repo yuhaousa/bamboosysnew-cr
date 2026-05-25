@@ -156,6 +156,13 @@ export const BLOCK_TYPES: BlockTypeMeta[] = [
     icon: 'code',
     category: 'utility',
   },
+  {
+    type: 'portfolio_section',
+    label: 'Portfolio',
+    description: 'Client portfolio grid with category filter',
+    icon: 'layout-grid',
+    category: 'social',
+  },
 ]
 
 export const BLOCK_CATEGORIES = [

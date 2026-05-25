@@ -9,12 +9,13 @@ export const useMediaStore = defineStore('media', () => {
   const loading = ref(false)
   const uploading = ref(false)
 
-  async function fetchMedia(params: { search?: string; page?: number } = {}) {
+  async function fetchMedia(params: { search?: string; page?: number; folder?: string } = {}) {
     loading.value = true
     try {
       const query = new URLSearchParams()
       if (params.search) query.set('search', params.search)
       if (params.page) query.set('page', String(params.page))
+      if (params.folder) query.set('folder', params.folder)
       const res = await api.get<{ data: MediaItem[]; total: number }>(`/media?${query}`)
       items.value = res.data
       total.value = res.total
@@ -23,12 +24,13 @@ export const useMediaStore = defineStore('media', () => {
     }
   }
 
-  async function uploadMedia(file: File, alt?: string): Promise<MediaItem> {
+  async function uploadMedia(file: File, alt?: string, folder?: string): Promise<MediaItem> {
     uploading.value = true
     try {
       const fd = new FormData()
       fd.append('file', file)
       if (alt) fd.append('alt', alt)
+      if (folder) fd.append('folder', folder)
       const res = await api.upload('/media/upload', fd) as ApiResponse<MediaItem>
       items.value.unshift(res.data)
       total.value++

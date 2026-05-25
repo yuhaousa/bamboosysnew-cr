@@ -61,6 +61,7 @@ import MapBlock from '@/components/blocks/MapBlock.vue'
 import NewsletterBlock from '@/components/blocks/NewsletterBlock.vue'
 import RichTextBlock from '@/components/blocks/RichTextBlock.vue'
 import CustomHTMLBlock from '@/components/blocks/CustomHTMLBlock.vue'
+import PortfolioBlock from '@/components/blocks/PortfolioBlock.vue'
 
 const blockMap: Record<BlockType, any> = {
   hero_banner: HeroBlock,
@@ -84,6 +85,7 @@ const blockMap: Record<BlockType, any> = {
   newsletter_section: NewsletterBlock,
   rich_text: RichTextBlock,
   custom_html: CustomHTMLBlock,
+  portfolio_section: PortfolioBlock,
 }
 
 const route = useRoute()

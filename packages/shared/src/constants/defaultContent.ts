@@ -199,6 +199,15 @@ export function getDefaultContent(type: BlockType): BlockContent {
       return { html: '<p>Add your content here...</p>' }
     case 'custom_html':
       return { html: '<!-- Add your HTML here -->', css: '' }
+    case 'portfolio_section':
+      return {
+        badge: 'Our Work',
+        title: 'Featured Projects',
+        description: 'A showcase of our client projects and success stories.',
+        columns: 3,
+        showFilter: true,
+        selectedIds: [],
+      }
     default:
       return {} as BlockContent
   }

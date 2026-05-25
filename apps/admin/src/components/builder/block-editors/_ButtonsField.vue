@@ -40,8 +40,8 @@ import type { BlockButton } from '@shared/types'
 const props = defineProps<{ buttons: BlockButton[] }>()
 const emit = defineEmits<{ update: [BlockButton[]] }>()
 
-const local = ref<BlockButton[]>(props.buttons.map(b => ({ ...b })))
-watch(() => props.buttons, bs => { local.value = bs.map(b => ({ ...b })) })
+const local = ref<BlockButton[]>((props.buttons ?? []).map(b => ({ ...b })))
+watch(() => props.buttons, bs => { local.value = (bs ?? []).map(b => ({ ...b })) })
 
 function add() {
   local.value.push({ text: 'Button', link: '/', variant: 'primary', target: '_self' })

@@ -54,6 +54,7 @@ export type BlockType =
   | 'newsletter_section'
   | 'rich_text'
   | 'custom_html'
+  | 'portfolio_section'
 
 export interface BlockImage {
   url: string
@@ -68,9 +69,13 @@ export interface BlockButton {
 }
 
 export interface BlockStyles {
+  variant?: 'light' | 'dark' | 'glass' | 'gradient'
   backgroundColor?: string
   textColor?: string
   backgroundImage?: string
+  gradientFrom?: string
+  gradientTo?: string
+  gradientAngle?: number
   alignment?: 'left' | 'center' | 'right'
   paddingTop?: string
   paddingBottom?: string
@@ -141,6 +146,7 @@ export interface ServicesSectionContent {
   subtitle?: string
   description?: string
   services: ServiceItem[]
+  selectedIds?: string[]
 }
 
 export interface CourseItem {
@@ -159,6 +165,7 @@ export interface CourseListingContent {
   title: string
   description?: string
   courses: CourseItem[]
+  selectedIds?: string[]   // when set, block fetches from DB instead of using courses[]
   columns: 2 | 3 | 4
 }
 
@@ -219,6 +226,7 @@ export interface TestimonialsContent {
   title?: string
   description?: string
   items: TestimonialItem[]
+  selectedIds?: string[]
 }
 
 export interface FAQItem {
@@ -232,6 +240,7 @@ export interface FAQContent {
   title?: string
   description?: string
   items: FAQItem[]
+  selectedIds?: string[]
 }
 
 export interface CTAContent {
@@ -273,6 +282,7 @@ export interface TeamSectionContent {
   title?: string
   description?: string
   members: TeamMember[]
+  selectedIds?: string[]
   columns: 2 | 3 | 4
 }
 
@@ -332,6 +342,110 @@ export interface CustomHTMLContent {
   css?: string
 }
 
+export interface PortfolioSectionContent {
+  badge?: string
+  title?: string
+  description?: string
+  columns?: number
+  showFilter?: boolean
+  selectedIds?: string[]
+}
+  css?: string
+}
+
+// ─── Dynamic DB Entities ─────────────────────────────────────────────────────
+
+export interface DbCourse {
+  id: string
+  title: string
+  slug: string
+  shortDescription: string
+  description: string
+  imageUrl?: string | null
+  imageAlt?: string | null
+  level?: string | null
+  duration?: string | null
+  price?: string | null
+  category?: string | null
+  isActive: boolean
+  sortOrder: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface DbTestimonial {
+  id: string
+  authorName: string
+  authorRole?: string | null
+  authorCompany?: string | null
+  avatarUrl?: string | null
+  quote: string
+  rating?: number | null
+  isActive: boolean
+  sortOrder: number
+  createdAt: string
+}
+
+export interface DbTeamMember {
+  id: string
+  name: string
+  role: string
+  bio?: string | null
+  imageUrl?: string | null
+  imageAlt?: string | null
+  email?: string | null
+  linkedin?: string | null
+  twitter?: string | null
+  isActive: boolean
+  sortOrder: number
+  createdAt: string
+}
+
+export interface DbService {
+  id: string
+  title: string
+  slug: string
+  icon?: string | null
+  shortDescription: string
+  description: string
+  imageUrl?: string | null
+  imageAlt?: string | null
+  isActive: boolean
+  sortOrder: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface DbFAQ {
+  id: string
+  question: string
+  answer: string
+  category?: string | null
+  isActive: boolean
+  sortOrder: number
+  createdAt: string
+}
+
+export interface DbPortfolioItem {
+  id: string
+  title: string
+  slug: string
+  clientName?: string | null
+  category?: string | null
+  shortDescription: string
+  description: string
+  imageUrl?: string | null
+  imageAlt?: string | null
+  logoUrl?: string | null
+  projectUrl?: string | null
+  tags: string[]
+  isActive: boolean
+  isFeatured: boolean
+  sortOrder: number
+  createdAt: string
+  updatedAt: string
+}
+
 export type BlockContent =
   | HeroBannerContent
   | ImageTextContent
@@ -353,6 +467,7 @@ export type BlockContent =
   | NewsletterContent
   | RichTextContent
   | CustomHTMLContent
+  | PortfolioSectionContent
 
 export interface Block {
   id: string

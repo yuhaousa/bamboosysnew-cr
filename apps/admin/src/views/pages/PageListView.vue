@@ -114,30 +114,90 @@
     </div>
 
     <!-- Create Page Modal -->
-    <AppModal v-model="showCreate" title="Create New Page" size="md">
-      <div class="space-y-4">
-        <div>
-          <label class="form-label">Page Title *</label>
-          <input v-model="createForm.title" class="form-input" placeholder="e.g. About Us" />
-        </div>
-        <div>
-          <label class="form-label">URL Slug *</label>
-          <div class="flex items-center gap-2">
-            <span class="text-gray-400">/</span>
-            <input v-model="createForm.slug" class="form-input flex-1" placeholder="about-us" />
+    <AppModal v-model="showCreate" size="lg" :hide-close="false" body-class="p-0">
+      <template #header>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-brand-500/10 flex items-center justify-center">
+            <FilePlus class="w-5 h-5 text-brand-500" />
+          </div>
+          <div>
+            <h3 class="text-base font-semibold text-gray-900 dark:text-white">Create New Page</h3>
+            <p class="text-xs text-gray-400 font-normal">Fill in the basics — you can always edit later</p>
           </div>
         </div>
+      </template>
+
+      <div class="px-6 py-5 space-y-5">
+        <!-- Title -->
         <div>
-          <label class="form-label">Description</label>
-          <textarea v-model="createForm.description" class="form-textarea" rows="2" />
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Page Title <span class="text-red-400">*</span></label>
+          <input
+            v-model="createForm.title"
+            class="form-input w-full text-base"
+            placeholder="e.g. About Us"
+            autofocus
+            @keyup.enter="createForm.title && createForm.slug && doCreate()"
+          />
+        </div>
+
+        <!-- Slug -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">URL Slug <span class="text-red-400">*</span></label>
+          <div class="flex items-center rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-brand-500 transition-all">
+            <span class="px-3 py-2.5 text-sm text-gray-400 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 select-none">yourdomain.com/</span>
+            <input
+              v-model="createForm.slug"
+              class="flex-1 px-3 py-2.5 text-sm bg-transparent outline-none text-gray-900 dark:text-white placeholder-gray-400"
+              placeholder="about-us"
+            />
+          </div>
+          <p class="mt-1.5 text-xs text-gray-400">Full URL: <span class="font-mono text-brand-500">{{ createForm.slug || 'your-slug' }}</span></p>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Description <span class="text-gray-400 font-normal text-xs">(optional)</span></label>
+          <textarea
+            v-model="createForm.description"
+            class="form-textarea w-full resize-none"
+            rows="2"
+            placeholder="Brief description of this page (used for SEO)"
+          />
+        </div>
+
+        <!-- Quick template chips -->
+        <div>
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Quick fill from common pages</p>
+          <div class="flex flex-wrap gap-2">
+            <button
+              v-for="tmpl in pageTemplates" :key="tmpl.slug"
+              @click="applyTemplate(tmpl)"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
+              :class="createForm.slug === tmpl.slug
+                ? 'bg-brand-500 text-white border-brand-500'
+                : 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-brand-400 hover:text-brand-500'"
+            >
+              <component :is="tmpl.icon" class="w-3 h-3" />
+              {{ tmpl.label }}
+            </button>
+          </div>
         </div>
       </div>
+
       <template #footer>
-        <div class="flex justify-end gap-2">
-          <button class="btn btn-secondary" @click="showCreate = false">Cancel</button>
-          <button class="btn btn-primary" @click="doCreate" :disabled="!createForm.title || !createForm.slug">
-            Create Page
-          </button>
+        <div class="flex items-center justify-between">
+          <p class="text-xs text-gray-400">Page will be saved as <span class="font-medium text-gray-600 dark:text-gray-300">Draft</span></p>
+          <div class="flex gap-2">
+            <button class="btn btn-secondary" @click="showCreate = false">Cancel</button>
+            <button
+              class="btn btn-primary gap-2"
+              @click="doCreate"
+              :disabled="!createForm.title || !createForm.slug || store.loading"
+            >
+              <FilePlus class="w-4 h-4" />
+              Create Page
+            </button>
+          </div>
         </div>
       </template>
     </AppModal>
@@ -149,7 +209,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-import { Plus, Search, Pencil, Copy, Globe, EyeOff, Trash2, FileText, Home } from 'lucide-vue-next'
+import { Plus, Search, Pencil, Copy, Globe, EyeOff, Trash2, FileText, Home, FilePlus, Info, Phone, BookOpen, Briefcase, HelpCircle, Newspaper } from 'lucide-vue-next'
 import { usePagesStore } from '@/stores/pages'
 import { useToast } from '@/composables/useToast'
 import AppModal from '@/components/common/AppModal.vue'
@@ -168,6 +228,20 @@ const showCreate = ref(false)
 const showDeleteConfirm = ref(false)
 const deleteTarget = ref<Page | null>(null)
 const createForm = ref({ title: '', slug: '', description: '' })
+
+const pageTemplates = [
+  { label: 'About Us', slug: 'about', title: 'About Us', icon: Info },
+  { label: 'Contact', slug: 'contact', title: 'Contact', icon: Phone },
+  { label: 'Blog', slug: 'blog', title: 'Blog', icon: Newspaper },
+  { label: 'Services', slug: 'services', title: 'Services', icon: Briefcase },
+  { label: 'Portfolio', slug: 'portfolio', title: 'Portfolio', icon: BookOpen },
+  { label: 'FAQ', slug: 'faq', title: 'FAQ', icon: HelpCircle },
+]
+
+function applyTemplate(tmpl: typeof pageTemplates[0]) {
+  createForm.value.title = tmpl.title
+  createForm.value.slug = tmpl.slug
+}
 
 onMounted(() => store.fetchPages())
 

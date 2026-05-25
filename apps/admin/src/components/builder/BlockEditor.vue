@@ -20,6 +20,7 @@
         <!-- Content tab -->
         <template v-if="activeTab === 'content'">
           <component
+            :key="block.id"
             :is="editorComponent"
             :content="block.content"
             @update="(c: unknown) => $emit('update-content', c)"
@@ -28,7 +29,7 @@
 
         <!-- Style tab -->
         <template v-if="activeTab === 'style'">
-          <StylePanel :styles="block.styles" @update="(s: unknown) => $emit('update-styles', s)" />
+          <StylePanel :key="block.id" :styles="block.styles" @update="(s: unknown) => $emit('update-styles', s)" />
         </template>
 
         <!-- Visibility tab -->
@@ -64,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineAsyncComponent } from 'vue'
+import { ref, computed, watch, defineAsyncComponent } from 'vue'
 import { MousePointerClick } from 'lucide-vue-next'
 import StylePanel from './StylePanel.vue'
 import type { Block } from '@shared/types'
@@ -80,6 +81,7 @@ defineEmits<{
 }>()
 
 const activeTab = ref('content')
+watch(() => props.block?.id, () => { activeTab.value = 'content' })
 
 const tabs = [
   { id: 'content', label: 'Content' },
@@ -109,6 +111,7 @@ const editorMap: Record<string, ReturnType<typeof defineAsyncComponent>> = {
   newsletter_section: defineAsyncComponent(() => import('./block-editors/NewsletterEditor.vue')),
   rich_text: defineAsyncComponent(() => import('./block-editors/RichTextEditor.vue')),
   custom_html: defineAsyncComponent(() => import('./block-editors/CustomHTMLEditor.vue')),
+  portfolio_section: defineAsyncComponent(() => import('./block-editors/PortfolioEditor.vue')),
 }
 
 const editorComponent = computed(() => {

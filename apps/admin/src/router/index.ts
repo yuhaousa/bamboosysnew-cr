@@ -63,6 +63,36 @@ const router = createRouter({
           name: 'audit',
           component: () => import('@/views/AuditLogsView.vue'),
         },
+        {
+          path: 'content/courses',
+          name: 'courses',
+          component: () => import('@/views/content/CoursesView.vue'),
+        },
+        {
+          path: 'content/testimonials',
+          name: 'testimonials',
+          component: () => import('@/views/content/TestimonialsView.vue'),
+        },
+        {
+          path: 'content/team',
+          name: 'team',
+          component: () => import('@/views/content/TeamView.vue'),
+        },
+        {
+          path: 'content/services',
+          name: 'services',
+          component: () => import('@/views/content/ServicesView.vue'),
+        },
+        {
+          path: 'content/faqs',
+          name: 'faqs',
+          component: () => import('@/views/content/FAQsView.vue'),
+        },
+        {
+          path: 'content/portfolio',
+          name: 'portfolio',
+          component: () => import('@/views/content/PortfolioView.vue'),
+        },
       ],
     },
     {
