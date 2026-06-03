@@ -1,0 +1,57 @@
+<template>
+  <div class="space-y-4">
+    <FieldGroup label="Badge"><input v-model="local.badge" @input="emit" class="form-input" /></FieldGroup>
+    <FieldGroup label="Title"><input v-model="local.title" @input="emit" class="form-input" /></FieldGroup>
+    <FieldGroup label="Description"><textarea v-model="local.description" @input="emit" class="form-textarea" rows="2" /></FieldGroup>
+    <FieldGroup label="Columns">
+      <select v-model.number="local.columns" @change="emit" class="form-select">
+        <option :value="2">2</option>
+        <option :value="3">3</option>
+        <option :value="4">4</option>
+        <option :value="5">5</option>
+        <option :value="6">6</option>
+      </select>
+    </FieldGroup>
+    <FieldGroup label="Partner Type">
+      <select v-model="local.partnerType" @change="emit" class="form-select">
+        <option value="">All Partners</option>
+        <option value="strategic">Strategic Partners</option>
+        <option value="industry">Industry Partners</option>
+      </select>
+    </FieldGroup>
+    <FieldGroup label="Partners">
+      <p class="text-xs text-gray-500 mb-2">Select partner logos from your partners content library.</p>
+      <DbPicker entity="partners" label="partners" v-model="local.selectedIds" @update:modelValue="emit" />
+    </FieldGroup>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { reactive, watch } from 'vue'
+import FieldGroup from './_FieldGroup.vue'
+import DbPicker from './_DbPicker.vue'
+import type { PartnersGridContent } from '@shared/types'
+
+const props = defineProps<{ content: PartnersGridContent }>()
+const emit_ = defineEmits<{ update: [PartnersGridContent] }>()
+
+const local = reactive<PartnersGridContent>({
+  ...props.content,
+  columns: props.content.columns ?? 5,
+  selectedIds: props.content.selectedIds ?? [],
+  partnerType: props.content.partnerType ?? '',
+})
+
+watch(() => props.content, (content) => {
+  Object.assign(local, {
+    ...content,
+    columns: content.columns ?? 5,
+    selectedIds: content.selectedIds ?? [],
+    partnerType: content.partnerType ?? '',
+  })
+}, { deep: true })
+
+function emit() {
+  emit_('update', { ...local })
+}
+</script>

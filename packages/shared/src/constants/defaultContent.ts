@@ -41,6 +41,37 @@ export function getDefaultContent(type: BlockType): BlockContent {
           { id: '3', icon: 'shield', title: 'Feature Three', description: 'Description of this feature.' },
         ],
       }
+    case 'clients_grid':
+      return {
+        badge: 'Trusted By',
+        title: 'Our Clients',
+        description: 'Brands and organizations we are proud to work with.',
+        columns: 5,
+        selectedIds: [],
+      }
+    case 'partners_grid':
+      return {
+        badge: 'Our Network',
+        title: 'Our Partners',
+        description: 'Strategic and industry partners who help us grow.',
+        columns: 5,
+        selectedIds: [],
+        partnerType: '',
+      }
+    case 'solutions_showcase':
+      return {
+        badge: 'Solutions',
+        title: 'Built Around Real Business Needs',
+        description: 'Explore the solution families we use to solve complex problems with clarity and speed.',
+        selectedIds: [],
+      }
+    case 'about_us_showcase':
+      return {
+        badge: 'About Us',
+        title: 'The Story, Values, and Perspective Behind Our Work',
+        description: 'A refined introduction to who we are, what we believe, and how we approach meaningful work.',
+        selectedIds: [],
+      }
     case 'services_section':
       return {
         badge: 'Services',
