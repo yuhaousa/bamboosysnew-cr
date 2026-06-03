@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "bamboosys-db"
-database_id = "YOUR_D1_DATABASE_ID"
+database_id = "c0f37df7-b388-46ac-980e-59ebc91bf5b2"
 migrations_dir = "../../migrations"
 
 [[r2_buckets]]
@@ -23,4 +23,4 @@ ADMIN_ORIGIN = "http://localhost:8001"
 FRONTEND_ORIGIN = "http://localhost:8002"
 ADMIN_EMAIL = "admin@example.com"
 ADMIN_PASSWORD = "changeme123"
-JWT_SECRET = "CHANGE_THIS_TO_A_RANDOM_SECRET_AT_LEAST_32_CHARS"
+JWT_SECRET = "8afb04a20613c8a8db4df20778738178f19597e56cf141dc7163bebf8dccd0ad"

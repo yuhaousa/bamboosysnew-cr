@@ -96,6 +96,10 @@ import HeroBlock from '@/components/blocks/HeroBlock.vue'
 import ImageTextBlock from '@/components/blocks/ImageTextBlock.vue'
 import CenteredTextBlock from '@/components/blocks/CenteredTextBlock.vue'
 import FeatureCardsBlock from '@/components/blocks/FeatureCardsBlock.vue'
+import ClientsGridBlock from '@/components/blocks/ClientsGridBlock.vue'
+import PartnersGridBlock from '@/components/blocks/PartnersGridBlock.vue'
+import SolutionsShowcaseBlock from '@/components/blocks/SolutionsShowcaseBlock.vue'
+import AboutUsShowcaseBlock from '@/components/blocks/AboutUsShowcaseBlock.vue'
 import ServicesBlock from '@/components/blocks/ServicesBlock.vue'
 import CourseListingBlock from '@/components/blocks/CourseListingBlock.vue'
 import AboutBlock from '@/components/blocks/AboutBlock.vue'
@@ -117,6 +121,10 @@ import PortfolioBlock from '@/components/blocks/PortfolioBlock.vue'
 const blockMap: Record<string, any> = {
   hero_banner: HeroBlock, image_left_content_right: ImageTextBlock, content_left_image_right: ImageTextBlock,
   centered_text: CenteredTextBlock, feature_cards: FeatureCardsBlock, services_section: ServicesBlock,
+  clients_grid: ClientsGridBlock,
+  partners_grid: PartnersGridBlock,
+  solutions_showcase: SolutionsShowcaseBlock,
+  about_us_showcase: AboutUsShowcaseBlock,
   course_listing: CourseListingBlock, about_section: AboutBlock, gallery_section: GalleryBlock,
   video_section: VideoBlock, testimonials: TestimonialsBlock, faq: FAQBlock, call_to_action: CTABlock,
   statistics_counters: StatisticsBlock, team_section: TeamBlock, pricing_section: PricingBlock,
@@ -128,6 +136,10 @@ const blockMap: Record<string, any> = {
 const blockLabels: Record<string, string> = {
   hero_banner: 'Hero Banner', image_left_content_right: 'Image + Text', content_left_image_right: 'Text + Image',
   centered_text: 'Centered Text', feature_cards: 'Feature Cards', services_section: 'Services',
+  clients_grid: 'Clients Grid',
+  partners_grid: 'Partners Grid',
+  solutions_showcase: 'Solutions Showcase',
+  about_us_showcase: 'About Us Showcase',
   course_listing: 'Courses', about_section: 'About', gallery_section: 'Gallery', video_section: 'Video',
   testimonials: 'Testimonials', faq: 'FAQ', call_to_action: 'Call to Action',
   statistics_counters: 'Statistics', team_section: 'Team', pricing_section: 'Pricing',

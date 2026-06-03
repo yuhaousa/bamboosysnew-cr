@@ -93,6 +93,31 @@ const router = createRouter({
           name: 'portfolio',
           component: () => import('@/views/content/PortfolioView.vue'),
         },
+        {
+          path: 'content/features',
+          name: 'features',
+          component: () => import('@/views/content/FeaturesView.vue'),
+        },
+        {
+          path: 'content/clients',
+          name: 'clients',
+          component: () => import('@/views/content/ClientsView.vue'),
+        },
+        {
+          path: 'content/partners',
+          name: 'partners',
+          component: () => import('@/views/content/PartnersView.vue'),
+        },
+        {
+          path: 'content/solutions',
+          name: 'solutions',
+          component: () => import('@/views/content/SolutionsView.vue'),
+        },
+        {
+          path: 'content/about-us',
+          name: 'about-us',
+          component: () => import('@/views/content/AboutUsView.vue'),
+        },
       ],
     },
     {

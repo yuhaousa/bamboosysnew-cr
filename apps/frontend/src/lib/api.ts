@@ -1,4 +1,4 @@
-import type { DbCourse, DbTestimonial, DbTeamMember, DbService, DbFAQ, DbPortfolioItem } from '@shared/types'
+import type { DbCourse, DbTestimonial, DbTeamMember, DbService, DbFAQ, DbPortfolioItem, DbClient, DbPartner, DbSolution, DbAboutUs } from '@shared/types'
 
 const API_URL = import.meta.env.VITE_API_URL ?? ''
 
@@ -35,6 +35,33 @@ export async function fetchTeam(ids?: string[]): Promise<DbTeamMember[]> {
 export async function fetchServices(ids?: string[]): Promise<DbService[]> {
   const qs = ids?.length ? `?ids=${ids.join(',')}` : ''
   const res = await apiFetch<{ data: DbService[] }>(`/api/public/services${qs}`)
+  return res.data
+}
+
+export async function fetchClients(ids?: string[]): Promise<DbClient[]> {
+  const qs = ids?.length ? `?ids=${ids.join(',')}` : ''
+  const res = await apiFetch<{ data: DbClient[] }>(`/api/public/clients${qs}`)
+  return res.data
+}
+
+export async function fetchPartners(ids?: string[], type?: string): Promise<DbPartner[]> {
+  const params = new URLSearchParams()
+  if (ids?.length) params.set('ids', ids.join(','))
+  if (type) params.set('type', type)
+  const qs = params.toString() ? `?${params}` : ''
+  const res = await apiFetch<{ data: DbPartner[] }>(`/api/public/partners${qs}`)
+  return res.data
+}
+
+export async function fetchSolutions(ids?: string[]): Promise<DbSolution[]> {
+  const qs = ids?.length ? `?ids=${ids.join(',')}` : ''
+  const res = await apiFetch<{ data: DbSolution[] }>(`/api/public/solutions${qs}`)
+  return res.data
+}
+
+export async function fetchAboutUs(ids?: string[]): Promise<DbAboutUs[]> {
+  const qs = ids?.length ? `?ids=${ids.join(',')}` : ''
+  const res = await apiFetch<{ data: DbAboutUs[] }>(`/api/public/about-us${qs}`)
   return res.data
 }
 

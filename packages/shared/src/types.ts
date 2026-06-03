@@ -38,6 +38,10 @@ export type BlockType =
   | 'content_left_image_right'
   | 'centered_text'
   | 'feature_cards'
+  | 'clients_grid'
+  | 'partners_grid'
+  | 'solutions_showcase'
+  | 'about_us_showcase'
   | 'services_section'
   | 'course_listing'
   | 'about_section'
@@ -130,6 +134,37 @@ export interface FeatureCardsContent {
   columns: 2 | 3 | 4
 }
 
+export interface ClientsGridContent {
+  badge?: string
+  title?: string
+  description?: string
+  columns?: 2 | 3 | 4 | 5 | 6
+  selectedIds?: string[]
+}
+
+export interface PartnersGridContent {
+  badge?: string
+  title?: string
+  description?: string
+  columns?: 2 | 3 | 4 | 5 | 6
+  selectedIds?: string[]
+  partnerType?: 'strategic' | 'industry' | ''
+}
+
+export interface SolutionsShowcaseContent {
+  badge?: string
+  title?: string
+  description?: string
+  selectedIds?: string[]
+}
+
+export interface AboutUsShowcaseContent {
+  badge?: string
+  title?: string
+  description?: string
+  selectedIds?: string[]
+}
+
 export interface ServiceItem {
   id: string
   icon?: string
@@ -184,8 +219,6 @@ export interface AboutSectionContent {
   highlights: string[] | AboutHighlight[]
   image: BlockImage
   stats: Array<{ id?: string; label: string; value: string }>
-  buttons: BlockButton[]
-}
   buttons: BlockButton[]
 }
 
@@ -350,8 +383,6 @@ export interface PortfolioSectionContent {
   showFilter?: boolean
   selectedIds?: string[]
 }
-  css?: string
-}
 
 // ─── Dynamic DB Entities ─────────────────────────────────────────────────────
 
@@ -416,6 +447,68 @@ export interface DbService {
   updatedAt: string
 }
 
+export interface DbClient {
+  id: string
+  name: string
+  imageUrl?: string | null
+  icon?: string | null
+  isActive: boolean
+  sortOrder: number
+  createdAt: string
+}
+
+export interface DbPartner {
+  id: string
+  name: string
+  imageUrl?: string | null
+  partnerType?: string | null
+  isActive: boolean
+  sortOrder: number
+  createdAt: string
+}
+
+export interface DbSolutionEntry {
+  id: string
+  solutionId: string
+  title: string
+  imageUrl?: string | null
+  description: string
+  sortOrder: number
+  createdAt: string
+}
+
+export interface DbSolution {
+  id: string
+  name: string
+  isActive: boolean
+  sortOrder: number
+  entryCount?: number
+  createdAt: string
+  updatedAt: string
+  entries?: DbSolutionEntry[]
+}
+
+export interface DbAboutUsEntry {
+  id: string
+  aboutUsId: string
+  title: string
+  imageUrl?: string | null
+  description: string
+  sortOrder: number
+  createdAt: string
+}
+
+export interface DbAboutUs {
+  id: string
+  name: string
+  isActive: boolean
+  sortOrder: number
+  entryCount?: number
+  createdAt: string
+  updatedAt: string
+  entries?: DbAboutUsEntry[]
+}
+
 export interface DbFAQ {
   id: string
   question: string
@@ -446,11 +539,37 @@ export interface DbPortfolioItem {
   updatedAt: string
 }
 
+export interface DbFeatureItem {
+  id: string
+  featureId: string
+  title: string
+  description: string
+  imageUrl?: string | null
+  stack: string
+  sortOrder: number
+  createdAt: string
+}
+
+export interface DbFeature {
+  id: string
+  title: string
+  summary: string
+  isActive: boolean
+  sortOrder: number
+  createdAt: string
+  updatedAt: string
+  items?: DbFeatureItem[]
+}
+
 export type BlockContent =
   | HeroBannerContent
   | ImageTextContent
   | CenteredTextContent
   | FeatureCardsContent
+  | ClientsGridContent
+  | PartnersGridContent
+  | SolutionsShowcaseContent
+  | AboutUsShowcaseContent
   | ServicesSectionContent
   | CourseListingContent
   | AboutSectionContent

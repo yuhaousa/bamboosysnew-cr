@@ -45,6 +45,10 @@ import HeroBlock from '@/components/blocks/HeroBlock.vue'
 import ImageTextBlock from '@/components/blocks/ImageTextBlock.vue'
 import CenteredTextBlock from '@/components/blocks/CenteredTextBlock.vue'
 import FeatureCardsBlock from '@/components/blocks/FeatureCardsBlock.vue'
+import ClientsGridBlock from '@/components/blocks/ClientsGridBlock.vue'
+import PartnersGridBlock from '@/components/blocks/PartnersGridBlock.vue'
+import SolutionsShowcaseBlock from '@/components/blocks/SolutionsShowcaseBlock.vue'
+import AboutUsShowcaseBlock from '@/components/blocks/AboutUsShowcaseBlock.vue'
 import ServicesBlock from '@/components/blocks/ServicesBlock.vue'
 import CourseListingBlock from '@/components/blocks/CourseListingBlock.vue'
 import AboutBlock from '@/components/blocks/AboutBlock.vue'
@@ -69,6 +73,10 @@ const blockMap: Record<BlockType, any> = {
   content_left_image_right: ImageTextBlock,
   centered_text: CenteredTextBlock,
   feature_cards: FeatureCardsBlock,
+  clients_grid: ClientsGridBlock,
+  partners_grid: PartnersGridBlock,
+  solutions_showcase: SolutionsShowcaseBlock,
+  about_us_showcase: AboutUsShowcaseBlock,
   services_section: ServicesBlock,
   course_listing: CourseListingBlock,
   about_section: AboutBlock,

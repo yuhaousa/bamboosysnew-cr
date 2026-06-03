@@ -7,6 +7,10 @@ import { mapMember } from './team'
 import { mapService } from './services-entity'
 import { mapFAQ } from './faqs'
 import { mapPortfolioItem } from './portfolio'
+import { mapClient } from './clients'
+import { mapPartner } from './partners'
+import { mapSolution, mapSolutionEntry } from './solutions'
+import { mapAboutUs, mapAboutUsEntry } from './about-us'
 
 const router = new Hono<{ Bindings: Env }>()
 
@@ -107,7 +111,7 @@ router.get('/settings', async (c) => {
 router.get('/menus/:slug', async (c) => {
   const row = await c.env.DB.prepare('SELECT * FROM menus WHERE slug = ?').bind(c.req.param('slug')).first<Record<string, unknown>>()
   if (!row) return c.json({ data: { id: '', slug: c.req.param('slug'), items: [] } })
-  return c.json({ data: { id: row.id, name: row.name, slug: row.slug, items: parseJSON(row.items as string, []) } })
+  return c.json({ data: { id: row.id, name: row.name, slug: row.slug, items: normalizeMenuItems(parseJSON(row.items as string, [])) } })
 })
 
 // GET /api/public/menus — all menus
@@ -116,7 +120,7 @@ router.get('/menus', async (c) => {
   return c.json({
     data: (rows.results || []).map(r => {
       const row = r as Record<string, unknown>
-      return { id: row.id, name: row.name, slug: row.slug, items: parseJSON(row.items as string, []) }
+      return { id: row.id, name: row.name, slug: row.slug, items: normalizeMenuItems(parseJSON(row.items as string, [])) }
     })
   })
 })
@@ -228,4 +232,99 @@ router.get('/portfolio', async (c) => {
   return c.json({ data: (rows.results || []).map(r => mapPortfolioItem(r as Record<string, unknown>)) })
 })
 
+// GET /api/public/clients?ids=id1,id2
+router.get('/clients', async (c) => {
+  const ids = c.req.query('ids')
+  let q = 'SELECT * FROM clients WHERE is_active = 1'
+  const params: unknown[] = []
+  if (ids) {
+    const list = ids.split(',').filter(Boolean)
+    if (list.length) { q += ` AND id IN (${list.map(() => '?').join(',')})`; params.push(...list) }
+  }
+  q += ' ORDER BY sort_order ASC, created_at ASC'
+  const rows = await c.env.DB.prepare(q).bind(...params).all()
+  return c.json({ data: (rows.results || []).map(r => mapClient(r as Record<string, unknown>)) })
+})
+
+// GET /api/public/partners?ids=id1,id2&type=strategic|industry
+router.get('/partners', async (c) => {
+  const { ids, type } = c.req.query()
+  let q = 'SELECT * FROM partners WHERE is_active = 1'
+  const params: unknown[] = []
+  if (ids) {
+    const list = ids.split(',').filter(Boolean)
+    if (list.length) { q += ` AND id IN (${list.map(() => '?').join(',')})`; params.push(...list) }
+  }
+  if (type) { q += ' AND partner_type = ?'; params.push(type) }
+  q += ' ORDER BY sort_order ASC, created_at ASC'
+  const rows = await c.env.DB.prepare(q).bind(...params).all()
+  return c.json({ data: (rows.results || []).map(r => mapPartner(r as Record<string, unknown>)) })
+})
+
+// GET /api/public/solutions?ids=id1,id2
+router.get('/solutions', async (c) => {
+  const ids = c.req.query('ids')
+  let q = 'SELECT * FROM solutions WHERE is_active = 1'
+  const params: unknown[] = []
+  if (ids) {
+    const list = ids.split(',').filter(Boolean)
+    if (list.length) { q += ` AND id IN (${list.map(() => '?').join(',')})`; params.push(...list) }
+  }
+  q += ' ORDER BY sort_order ASC, created_at ASC'
+  const rows = await c.env.DB.prepare(q).bind(...params).all()
+  const solutions = (rows.results || []).map((row) => mapSolution(row as Record<string, unknown>))
+  const withEntries = await Promise.all(
+    solutions.map(async (solution) => {
+      const entryRows = await c.env.DB.prepare(
+        'SELECT * FROM solution_entries WHERE solution_id = ? ORDER BY sort_order ASC, created_at ASC'
+      ).bind(solution.id).all()
+      return {
+        ...solution,
+        entries: (entryRows.results || []).map((entry) => mapSolutionEntry(entry as Record<string, unknown>)),
+      }
+    })
+  )
+  return c.json({ data: withEntries })
+})
+
+// GET /api/public/about-us?ids=id1,id2
+router.get('/about-us', async (c) => {
+  const ids = c.req.query('ids')
+  let q = 'SELECT * FROM about_us WHERE is_active = 1'
+  const params: unknown[] = []
+  if (ids) {
+    const list = ids.split(',').filter(Boolean)
+    if (list.length) { q += ` AND id IN (${list.map(() => '?').join(',')})`; params.push(...list) }
+  }
+  q += ' ORDER BY sort_order ASC, created_at ASC'
+  const rows = await c.env.DB.prepare(q).bind(...params).all()
+  const items = (rows.results || []).map((row) => mapAboutUs(row as Record<string, unknown>))
+  const withEntries = await Promise.all(
+    items.map(async (item) => {
+      const entryRows = await c.env.DB.prepare(
+        'SELECT * FROM about_us_entries WHERE about_us_id = ? ORDER BY sort_order ASC, created_at ASC'
+      ).bind(item.id).all()
+      return {
+        ...item,
+        entries: (entryRows.results || []).map((entry) => mapAboutUsEntry(entry as Record<string, unknown>)),
+      }
+    })
+  )
+  return c.json({ data: withEntries })
+})
+
 export default router
+
+function normalizeMenuItems(items: unknown): unknown[] {
+  if (!Array.isArray(items)) return []
+  return items.map((item) => {
+    const current = item as Record<string, unknown>
+    return {
+      id: current.id,
+      label: current.label,
+      link: typeof current.link === 'string' ? current.link : (typeof current.url === 'string' ? current.url : '/'),
+      target: current.target === '_blank' || current.openInNewTab === true ? '_blank' : '_self',
+      children: normalizeMenuItems(current.children),
+    }
+  })
+}

@@ -18,7 +18,9 @@
         <div><label class="form-label">Level</label>
           <select v-model="form.level" class="form-select">
             <option value="">Any</option>
-            <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
           </select>
         </div>
         <div><label class="form-label">Duration</label><input v-model="form.duration" class="form-input" placeholder="e.g. 8 weeks" /></div>
@@ -38,7 +40,7 @@
         <button @click="showForm = false" class="btn-secondary text-sm">Cancel</button>
         <button @click="save" :disabled="saving" class="btn-primary text-sm">{{ saving ? 'Saving…' : 'Save Course' }}</button>
       </template>
-    </AppModal
+    </AppModal>
     <!-- Table -->
     <div class="card overflow-hidden !p-0">
       <div v-if="loading" class="p-8 text-center text-gray-400">Loading…</div>

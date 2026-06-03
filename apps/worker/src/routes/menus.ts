@@ -62,9 +62,23 @@ function mapMenu(row: unknown) {
     id: r.id,
     name: r.name,
     slug: r.slug,
-    items: parseJSON(r.items as string, []),
+    items: normalizeMenuItems(parseJSON(r.items as string, [])),
     createdAt: r.created_at,
   }
+}
+
+function normalizeMenuItems(items: unknown): unknown[] {
+  if (!Array.isArray(items)) return []
+  return items.map((item) => {
+    const current = item as Record<string, unknown>
+    return {
+      id: current.id,
+      label: current.label,
+      link: typeof current.link === 'string' ? current.link : (typeof current.url === 'string' ? current.url : '/'),
+      target: current.target === '_blank' || current.openInNewTab === true ? '_blank' : '_self',
+      children: normalizeMenuItems(current.children),
+    }
+  })
 }
 
 export default router
