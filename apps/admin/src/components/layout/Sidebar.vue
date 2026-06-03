@@ -76,7 +76,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   LayoutDashboard, FileText, Image, Settings, Users, ChevronLeft, ChevronRight,
-  Menu, ClipboardList, Globe, BookOpen, MessageSquare, Users2, Briefcase, HelpCircle, LayoutGrid
+  Menu, ClipboardList, Globe, BookOpen, MessageSquare, Users2, Briefcase, HelpCircle, LayoutGrid, Sparkles, Handshake, Building2, Puzzle, BadgeInfo
 } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
@@ -117,6 +117,11 @@ const navGroups = [
       { to: '/content/services', label: 'Services', icon: Briefcase },
       { to: '/content/faqs', label: 'FAQs', icon: HelpCircle },
       { to: '/content/portfolio', label: 'Portfolio', icon: LayoutGrid },
+      { to: '/content/features', label: 'Features', icon: Sparkles },
+      { to: '/content/clients', label: 'Clients', icon: Building2 },
+      { to: '/content/partners', label: 'Partners', icon: Handshake },
+      { to: '/content/solutions', label: 'Solutions', icon: Puzzle },
+      { to: '/content/about-us', label: 'About Us', icon: BadgeInfo },
     ],
   },
   {
@@ -135,4 +140,3 @@ function isActive(to: string) {
   return route.path.startsWith(to)
 }
 </script>
-

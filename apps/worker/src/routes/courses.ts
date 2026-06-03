@@ -10,6 +10,11 @@ function slugify(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
+function normalizeCourseLevel(level: unknown) {
+  const value = typeof level === 'string' ? level.trim().toLowerCase() : ''
+  return ['beginner', 'intermediate', 'advanced'].includes(value) ? value : ''
+}
+
 // GET /api/courses
 router.get('/', async (c) => {
   const { search, active, page = '1', limit = '50' } = c.req.query()
@@ -41,7 +46,7 @@ router.post('/', requireRole('super_admin', 'admin', 'editor'), async (c) => {
     `INSERT INTO courses (id, title, slug, short_description, description, image_url, image_alt, level, duration, price, category, is_active, sort_order, created_at, updated_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(id, body.title, slug, body.short_description ?? '', body.description ?? '',
-    body.image_url ?? null, body.image_alt ?? null, body.level ?? '', body.duration ?? null,
+    body.image_url ?? null, body.image_alt ?? null, normalizeCourseLevel(body.level), body.duration ?? null,
     body.price ?? null, body.category ?? null, body.is_active ?? 1, body.sort_order ?? 0,
     now(), now()).run()
   const row = await c.env.DB.prepare('SELECT * FROM courses WHERE id = ?').bind(id).first()
@@ -62,7 +67,8 @@ router.put('/:id', requireRole('super_admin', 'admin', 'editor'), async (c) => {
     body.description ?? (existing as any).description,
     body.image_url ?? (existing as any).image_url,
     body.image_alt ?? (existing as any).image_alt,
-    body.level ?? (existing as any).level, body.duration ?? (existing as any).duration,
+    body.level !== undefined ? normalizeCourseLevel(body.level) : (existing as any).level,
+    body.duration ?? (existing as any).duration,
     body.price ?? (existing as any).price, body.category ?? (existing as any).category,
     body.is_active ?? (existing as any).is_active, body.sort_order ?? (existing as any).sort_order,
     now(), id).run()

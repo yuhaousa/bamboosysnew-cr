@@ -39,11 +39,22 @@
           <h4 class="text-white font-semibold mb-5 text-sm">Company</h4>
           <ul class="space-y-3">
             <li v-for="item in footerMenu.items" :key="item.id">
-              <a
-                :href="item.url || '#'"
-                :target="item.openInNewTab ? '_blank' : '_self'"
-                class="text-sm text-gray-400 hover:text-white transition-colors"
-              >{{ item.label }}</a>
+              <div class="space-y-2">
+                <a
+                  :href="item.link || '#'"
+                  :target="item.target || '_self'"
+                  class="text-sm text-gray-400 hover:text-white transition-colors"
+                >{{ item.label }}</a>
+                <ul v-if="item.children?.length" class="pl-3 space-y-2">
+                  <li v-for="child in item.children" :key="child.id">
+                    <a
+                      :href="child.link || '#'"
+                      :target="child.target || '_self'"
+                      class="text-sm text-gray-500 hover:text-white transition-colors"
+                    >{{ child.label }}</a>
+                  </li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>
@@ -53,11 +64,22 @@
           <h4 class="text-white font-semibold mb-5 text-sm">Resources</h4>
           <ul class="space-y-3">
             <li v-for="item in resourcesMenu.items" :key="item.id">
-              <a
-                :href="item.url || '#'"
-                :target="item.openInNewTab ? '_blank' : '_self'"
-                class="text-sm text-gray-400 hover:text-white transition-colors"
-              >{{ item.label }}</a>
+              <div class="space-y-2">
+                <a
+                  :href="item.link || '#'"
+                  :target="item.target || '_self'"
+                  class="text-sm text-gray-400 hover:text-white transition-colors"
+                >{{ item.label }}</a>
+                <ul v-if="item.children?.length" class="pl-3 space-y-2">
+                  <li v-for="child in item.children" :key="child.id">
+                    <a
+                      :href="child.link || '#'"
+                      :target="child.target || '_self'"
+                      class="text-sm text-gray-500 hover:text-white transition-colors"
+                    >{{ child.label }}</a>
+                  </li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>
@@ -104,19 +126,19 @@ import { ref, computed, onMounted } from 'vue'
 import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-vue-next'
 import { apiFetch } from '@/lib/api'
 import { useSiteSettings } from '@/composables/useSiteSettings'
-import type { MenuData } from '@shared/types'
+import type { Menu } from '@shared/types'
 
 const { settings: siteSettings } = useSiteSettings()
-const footerMenu = ref<MenuData | null>(null)
-const resourcesMenu = ref<MenuData | null>(null)
+const footerMenu = ref<Menu | null>(null)
+const resourcesMenu = ref<Menu | null>(null)
 
 onMounted(async () => {
   try {
-    const data = await apiFetch<{ data: MenuData }>('/api/public/menus/footer')
+    const data = await apiFetch<{ data: Menu }>('/api/public/menus/footer')
     footerMenu.value = data.data
   } catch {}
   try {
-    const data = await apiFetch<{ data: MenuData }>('/api/public/menus/footer-resources')
+    const data = await apiFetch<{ data: Menu }>('/api/public/menus/footer-resources')
     resourcesMenu.value = data.data
   } catch {}
 })

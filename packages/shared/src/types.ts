@@ -186,8 +186,6 @@ export interface AboutSectionContent {
   stats: Array<{ id?: string; label: string; value: string }>
   buttons: BlockButton[]
 }
-  buttons: BlockButton[]
-}
 
 export interface GalleryItem {
   id: string
@@ -350,8 +348,6 @@ export interface PortfolioSectionContent {
   showFilter?: boolean
   selectedIds?: string[]
 }
-  css?: string
-}
 
 // ─── Dynamic DB Entities ─────────────────────────────────────────────────────
 
@@ -444,6 +440,28 @@ export interface DbPortfolioItem {
   sortOrder: number
   createdAt: string
   updatedAt: string
+}
+
+export interface DbFeatureItem {
+  id: string
+  featureId: string
+  title: string
+  description: string
+  imageUrl?: string | null
+  stack: string
+  sortOrder: number
+  createdAt: string
+}
+
+export interface DbFeature {
+  id: string
+  title: string
+  summary: string
+  isActive: boolean
+  sortOrder: number
+  createdAt: string
+  updatedAt: string
+  items?: DbFeatureItem[]
 }
 
 export type BlockContent =

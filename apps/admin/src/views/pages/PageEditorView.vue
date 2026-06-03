@@ -254,7 +254,7 @@ const page = computed(() => pagesStore.currentPage)
 const selectedBlock = computed(() => selectedBlockId.value ? blocksStore.blocks.find(b => b.id === selectedBlockId.value) : null)
 const previewUrl = computed(() => {
   if (!page.value) return ''
-  return `${import.meta.env.VITE_FRONTEND_URL ?? ''}/preview/${pageId}?token=preview`
+  return `http://localhost:8002/preview/${pageId}?token=preview`
 })
 
 const seoData = computed(() => ({

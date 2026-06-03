@@ -17,6 +17,11 @@ import teamRouter from './routes/team'
 import servicesEntityRouter from './routes/services-entity'
 import faqsRouter from './routes/faqs'
 import portfolioRouter from './routes/portfolio'
+import featuresRouter from './routes/features'
+import clientsRouter from './routes/clients'
+import partnersRouter from './routes/partners'
+import solutionsRouter from './routes/solutions'
+import aboutUsRouter from './routes/about-us'
 
 export interface Env {
   DB: D1Database
@@ -67,6 +72,11 @@ app.route('/api/team', teamRouter)
 app.route('/api/services-entity', servicesEntityRouter)
 app.route('/api/faqs', faqsRouter)
 app.route('/api/portfolio', portfolioRouter)
+app.route('/api/features', featuresRouter)
+app.route('/api/clients', clientsRouter)
+app.route('/api/partners', partnersRouter)
+app.route('/api/solutions', solutionsRouter)
+app.route('/api/about-us', aboutUsRouter)
 
 // ─── 404 ──────────────────────────────────────────────────────────────────────
 app.notFound((c) => c.json({ error: 'Not found' }, 404))

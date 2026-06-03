@@ -63,6 +63,18 @@
 
           <!-- Items -->
           <div>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <button @click="addItem" class="btn btn-secondary text-xs">
+                <Plus class="w-4 h-4" /> Add Menu Item
+              </button>
+              <button @click="addSolutionsDropdown" class="btn btn-secondary text-xs">
+                Add Solutions Dropdown
+              </button>
+              <button @click="addAboutUsDropdown" class="btn btn-secondary text-xs">
+                Add About Us Dropdown
+              </button>
+            </div>
+
             <VueDraggable v-model="editItems" handle=".drag-handle" class="space-y-2">
               <div
                 v-for="(item, i) in editItems" :key="item.id"
@@ -80,7 +92,7 @@
                       <div class="flex gap-2 mt-0.5">
                         <select
                           class="form-select text-sm flex-1"
-                          :value="getPagePickerValue(item.url)"
+                          :value="getPagePickerValue(item.link)"
                           @change="onPagePickerChange(i, $event)"
                         >
                           <option value="">— Pick a page —</option>
@@ -92,8 +104,8 @@
                           <option value="__custom__">Custom URL…</option>
                         </select>
                         <input
-                          v-if="isCustomUrl(item.url)"
-                          v-model="item.url"
+                          v-if="isCustomUrl(item.link)"
+                          v-model="item.link"
                           class="form-input text-sm flex-1"
                           placeholder="/path or https://..."
                         />
@@ -102,7 +114,7 @@
                   </div>
                   <div class="flex flex-col items-center gap-2 self-stretch justify-between py-0.5">
                     <label class="flex items-center gap-1 text-xs text-gray-400 cursor-pointer">
-                      <input type="checkbox" v-model="item.openInNewTab" class="rounded" />
+                      <input type="checkbox" :checked="item.target === '_blank'" @change="setTarget(item, $event)" class="rounded" />
                       <span class="hidden sm:inline">New tab</span>
                     </label>
                     <button @click="removeItem(i)" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20">
@@ -110,15 +122,59 @@
                     </button>
                   </div>
                 </div>
+
+                <div class="px-3 pb-3">
+                  <div class="rounded-lg border border-dashed border-gray-200 dark:border-gray-700 p-3 space-y-2">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Dropdown Items</p>
+                      <button @click="addChild(i)" class="text-xs text-brand-500 hover:underline">+ Add Child</button>
+                    </div>
+
+                    <div v-if="!item.children?.length" class="text-xs text-gray-400">
+                      No child items yet.
+                    </div>
+
+                    <div
+                      v-for="(child, childIndex) in item.children || []"
+                      :key="child.id"
+                      class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/30 p-3 space-y-2"
+                    >
+                      <div class="flex items-center justify-between gap-2">
+                        <input v-model="child.label" class="form-input text-sm" placeholder="Child label" />
+                        <button @click="removeChild(i, childIndex)" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20">
+                          <X class="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div class="flex gap-2">
+                        <select
+                          class="form-select text-sm flex-1"
+                          :value="getPagePickerValue(child.link)"
+                          @change="onChildPagePickerChange(i, childIndex, $event)"
+                        >
+                          <option value="">— Pick a page —</option>
+                          <optgroup label="Site Pages">
+                            <option v-for="p in availablePages" :key="p.id" :value="'/' + p.slug">
+                              {{ p.title }} (/{{ p.slug }})
+                            </option>
+                          </optgroup>
+                          <option value="__custom__">Custom URL…</option>
+                        </select>
+                        <input
+                          v-if="isCustomUrl(child.link)"
+                          v-model="child.link"
+                          class="form-input text-sm flex-1"
+                          placeholder="/path or https://..."
+                        />
+                      </div>
+                      <label class="flex items-center gap-2 text-xs text-gray-400 cursor-pointer">
+                        <input type="checkbox" :checked="child.target === '_blank'" @change="setTarget(child, $event)" class="rounded" />
+                        <span>Open in new tab</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </VueDraggable>
-
-            <button
-              @click="addItem"
-              class="mt-3 w-full py-2.5 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl text-xs text-gray-400 hover:border-brand-400 hover:text-brand-500 dark:hover:border-brand-500 transition-colors flex items-center justify-center gap-2"
-            >
-              <Plus class="w-4 h-4" /> Add Menu Item
-            </button>
           </div>
         </div>
       </div>
@@ -188,10 +244,17 @@ function getPagePickerValue(url: string) {
 function onPagePickerChange(i: number, e: Event) {
   const val = (e.target as HTMLSelectElement).value
   if (val === '__custom__') {
-    editItems.value[i].url = ''
+    editItems.value[i].link = ''
   } else {
-    editItems.value[i].url = val
+    editItems.value[i].link = val
   }
+}
+
+function onChildPagePickerChange(i: number, childIndex: number, e: Event) {
+  const val = (e.target as HTMLSelectElement).value
+  const child = editItems.value[i].children?.[childIndex]
+  if (!child) return
+  child.link = val === '__custom__' ? '' : val
 }
 
 onMounted(async () => {
@@ -204,14 +267,67 @@ watch(() => createForm.value.name, (n) => {
 
 function selectMenu(menu: Menu) {
   selected.value = menu
-  editItems.value = menu.items.map(i => ({ ...i }))
+  editItems.value = menu.items.map(cloneMenuItem)
 }
 
 function addItem() {
-  editItems.value.push({ id: uuid(), label: 'New Item', url: '/', openInNewTab: false })
+  editItems.value.push(createMenuItem())
 }
 
 function removeItem(i: number) { editItems.value.splice(i, 1) }
+
+function addChild(i: number) {
+  if (!editItems.value[i].children) editItems.value[i].children = []
+  editItems.value[i].children?.push(createMenuItem('Child Item'))
+}
+
+function removeChild(i: number, childIndex: number) {
+  editItems.value[i].children?.splice(childIndex, 1)
+}
+
+function setTarget(item: MenuItem, e: Event) {
+  item.target = (e.target as HTMLInputElement).checked ? '_blank' : '_self'
+}
+
+function createMenuItem(label = 'New Item', link = '/'): MenuItem {
+  return {
+    id: uuid(),
+    label,
+    link,
+    target: '_self',
+    children: [],
+  }
+}
+
+function cloneMenuItem(item: MenuItem): MenuItem {
+  return {
+    id: item.id,
+    label: item.label,
+    link: item.link,
+    target: item.target ?? '_self',
+    children: (item.children || []).map(cloneMenuItem),
+  }
+}
+
+function addSolutionsDropdown() {
+  editItems.value.push({
+    id: uuid(),
+    label: 'Solutions',
+    link: '/solutions',
+    target: '_self',
+    children: [createMenuItem('All Solutions', '/solutions')],
+  })
+}
+
+function addAboutUsDropdown() {
+  editItems.value.push({
+    id: uuid(),
+    label: 'About Us',
+    link: '/about-us',
+    target: '_self',
+    children: [createMenuItem('Overview', '/about-us')],
+  })
+}
 
 async function saveMenu() {
   if (!selected.value) return
